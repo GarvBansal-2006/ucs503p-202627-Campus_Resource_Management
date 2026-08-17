@@ -113,25 +113,29 @@ Build a \textbf{web-based} “Conflict-to-Resolution” system with the followin
 \end{enumerate}
 
 
-\subsection{Operational constraints for an educational, tier-2/3 setting}
+
+\subsection{Operational constraints for a University Campus}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Keep the solution usable on low-to-mid range devices via responsive web design.
-    \item Avoid dependence on advanced research algorithms; focus on workflow, automation, and system correctness.
-    \item Design for deployability using common web hosting and managed databases.
+    \item Ensure the web application remains responsive and functional on low-to-mid-range devices and variable campus network conditions.
+    \item Prioritize deterministic conflict detection, constraint-based venue matching, and workflow automation over computationally intensive or research-oriented algorithms.
+    \item Use widely supported web technologies, standard hosting infrastructure, and managed databases to enable cost-effective deployment and maintenance.
+    \item Design the system to handle concurrent booking requests and updates while maintaining consistent room availability and allocation state.
 \end{itemize}
 
 \section{Solution Approach %
 \BvrHint{\ldots Engineering focus}}
-This is an engineering course project, so we focus on scalable administrative and workflow aspects rather than novel algorithm research.
+This engineering project prioritizes scalable administrative workflows and reliable system automation over the development of research-oriented techniques.
 
-\subsection{Duplicate/quality assistance %
+\subsection{Resource Recommendations %
 \BvrHint{\ldots non-research}}
-Duplicate detection will be heuristic-based:
+Recommendations will use a rule-based ranking approach:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Normalize text (category + short description keywords).
-    \item Use a simple similarity measure (e.g., token overlap / TF-IDF cosine with threshold) without claiming state-of-the-art.
-    \item Show top candidate duplicates to staff for decision; never fully auto-delete or auto-reject.
+    \item Match required constraints such as capacity, facilities, activity type, and time slot against eligible resources.
+    \item Rank unoccupied rooms above occupied rooms. For occupied rooms, display basic conflict details such as the current activity, batch, faculty/supervisor, and occupancy duration.
+    \item For a conflict, recommend alternative rooms for both activities. If no suitable unoccupied room exists, consider relaxed alternatives based on factors such as greater distance or reduced resource availability while preserving essential constraints.
+    \item Present the top-ranked alternatives to the coordinator for final selection; the system will not automatically relocate or cancel activities.
 \end{itemize}
+
 
 \subsection{Web architecture %
 \BvrHint{\ldots web-based solution}}
