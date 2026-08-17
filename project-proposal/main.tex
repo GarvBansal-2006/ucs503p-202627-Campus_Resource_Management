@@ -103,11 +103,15 @@ Build a \textbf{web-based} “Conflict-to-Resolution” system with the followin
 
 \subsection{Core workflow}
 \begin{enumerate}[leftmargin=0.7cm]
-    \item Citizen creates a complaint and receives a complaint ID immediately.
-    \item System validates completeness and suggests possible duplicates (lightweight similarity on text/category and approximate location).
-    \item Department staff update status (Received $\rightarrow$ Assigned $\rightarrow$ In Progress $\rightarrow$ Resolved).
-    \item Citizen views status updates and resolution notes.
+    \item The coordinator defines the venue requirements, including seating capacity, required resources, time slot, and activity type, or directly specifies a preferred room (e.g., LT402).
+    \item The system evaluates available rooms against the specified constraints and ranks suitable venues based on resource and scheduling compatibility.
+    \item The coordinator selects a preferred venue from the available options.
+    \item If the selected venue is already occupied, the system displays the conflicting activity, expected occupancy, required resources, and responsible faculty member or supervisor.
+    \item The coordinator determines which activity retains the venue based on factors such as activity priority, timing, and resource requirements.
+    \item For the displaced activity, the system identifies and recommends currently unoccupied venues that satisfy its capacity, resource, and scheduling requirements.
+    \item The coordinator selects an alternative venue or cancels/reschedules the affected activity. The system records the resolution and notifies the relevant students and faculty.
 \end{enumerate}
+
 
 \subsection{Operational constraints for an educational, tier-2/3 setting}
 \begin{itemize}[leftmargin=0.7cm]
