@@ -202,16 +202,16 @@ The proposed system is designed to scale both in terms of system load and practi
 \end{enumerate}
 
 \section{Engine availability heuristic}
-A mature set of ``engines'' (tooling/services) is available to implement this as a web-based project:
+A mature software stack is available to implement the proposed campus resource allocation platform:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Web framework for REST APIs and templated/reactive pages.
-    \item Managed relational or document database.
-    \item Authentication approach (token-based or session-based).
-    \item Object storage for optional attachments (or local storage for pilot).
-    \item Test framework for unit/integration tests.
-    \item CI runner and staging deployment target.
+    \item Web framework: REST APIs and responsive frontend interfaces.
+    \item Database: Managed relational database for users, venues, bookings, and allocation history.
+    \item Authentication: Session- or token-based authentication with role-based access control.
+    \item Notification service: Notifications for booking changes and conflict resolution.
+    \item Testing framework: Unit and integration testing for workflow and allocation logic.
+    \item CI/CD infrastructure: Automated build, testing, and staging deployment pipeline.
 \end{itemize}
-We will use these mature components to focus on workflow design, correctness, and measurement rather than inventing new infrastructure.
+These established components allow the project to focus on workflow automation, allocation correctness, and measurable performance rather than developing the infrastructure from scratch.
 
 \section{Project scope and deliverables %
 \BvrHint{\ldots iteration-friendly}}
