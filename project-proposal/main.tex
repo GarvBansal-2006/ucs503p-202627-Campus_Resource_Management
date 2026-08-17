@@ -218,20 +218,18 @@ These established components allow the project to focus on workflow automation, 
 \subsection{Initial deliverable %
 \BvrHint{\ldots first iteration}}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Citizen submission form + complaint ID generation
-    \item Staff workflow: update status and assignment
-    \item Citizen status page: view timeline/history
-    \item Basic logging and timestamps for TTA measurement
-    \item CI: build + backend unit tests + linting
-    \item CD to staging with a single command or pipeline job
+    \item Venue requirement form + Conflict detection
+    \item Post-conflict recommendations: System recommends only currently unoccupied rooms that satisfy the affected activity's requirements.
+    \item Public announcements: Display cancellation or relocation notices for affected classes, without requiring student authentication in the initial prototype.
+    \item CI/CD: Automated build, backend testing, and deployment to a staging environment.
 \end{itemize}
 
 \subsection{Subsequent deliverables}
 \begin{itemize}[leftmargin=0.7cm]
-    \item Lightweight duplicate suggestions with staff review
-    \item Notification layer (email/SMS optional in later iteration; can start with in-app notifications)
-    \item Admin dashboard for metrics and backlog
-    \item Improved search/filtering and indexed queries for scale readiness
+    \item Incorporate venue proximity into the ranking of alternative rooms.
+    \item Notification layer: Add automated in-app notifications for affected students and faculty.
+    \item Introduce authenticated access.
+    \item Enhanced recommendation logic: Introduce weighted ranking based on proximity, resource availability, capacity, and other operational constraints.
 \end{itemize}
 
 \section{Risks and mitigations}
