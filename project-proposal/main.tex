@@ -152,12 +152,6 @@ CI/CD will be used to:
     \item Generate consistent, reproducible deployment artifacts for staging.
     \item Support frequent and reliable releases of incremental features.
 \end{itemize}
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
-\usepackage{enumitem}
-\usepackage{graphicx}
-\usepackage{xcolor}
 
 \section{Evaluation Criterion %
 \BvrHint{\ldots measurable and attributable}}
@@ -189,21 +183,21 @@ We will evaluate using quantitative metrics directly tied to the core venue-allo
 
 \section{Scalability %
 \BvrHint{\ldots with foresight}}
-The proposition should scale in both theoretical and practical senses.
+The proposed system is designed to scale both in terms of system load and practical deployment requirements.
 
 \begin{enumerate}[leftmargin=0.7cm]
-    \item \textbf{Scalable (theoretically):} The system should support growth in number of complaints and concurrent dashboard usage by:
+    \item \textbf{Scalable (theoretically):} The platform should support increasing numbers of venues, bookings, users, and concurrent requests through:
     \begin{itemize}[leftmargin=0.7cm]
-        \item decoupling components (frontend/backend),
-        \item enabling pagination and indexing for common queries,
+        \item decoupled frontend and backend services,
+        \item database indexing and pagination for frequent booking and availability queries,
         \item using stateless API design.
     \end{itemize}
     
-    \item \textbf{Operationally deployable (practically):} The system should run on common web hosting:
+    \item \textbf{Operationally deployable (practically):} The system should be deployable on standard cloud or web-hosting infrastructure using:
     \begin{itemize}[leftmargin=0.7cm]
-        \item managed database,
+        \item managed relational database services
         \item containerized or platform-hosted deployment,
-        \item CI/CD pipeline for staging/production.
+        \item CI/CD pipelines for automated staging and production releases.
     \end{itemize}
 \end{enumerate}
 
