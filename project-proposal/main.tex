@@ -231,16 +231,15 @@ These established components allow the project to focus on workflow automation, 
     \item Introduce authenticated access.
     \item Enhanced recommendation logic: Introduce weighted ranking based on proximity, resource availability, capacity, and other operational constraints.
 \end{itemize}
-
 \section{Risks and mitigations}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Data privacy / consent:} minimize collected data; keep attachments optional; store only what is needed.
-    \item \textbf{Staff adoption:} provide an easy UI for status updates; keep workflow steps minimal; include shortcuts.
-    \item \textbf{Evaluation measurement ambiguity:} instrument timestamps and define clear status transitions before development begins.
-    \item \textbf{Operational issues in pilot:} use staging early; ensure CI/CD produces repeatable deployments.
+    \item \textbf{Unauthorized access:} Implement role-based access control so only authorized coordinators can create, modify, relocate, or cancel venue bookings. Students should have read-only access to relevant announcements and schedule changes.
+    \item \textbf{Excessive data collection:} Store only operationally necessary data such as booking details, venue requirements, user roles, and allocation history.
+    \item \textbf{Evaluation ambiguity:} Log booking, conflict, recommendation, and resolution events with timestamps and define clear state transitions before implementation.
+    \item \textbf{Pilot deployment issues:} Deploy to staging early and use CI/CD to ensure reproducible builds, automated testing, and consistent deployments.
 \end{itemize}
 
 \section{Summary}
-This project proposes a deployable web platform to reduce grievance handling delays in a tier-2/3 city context. It meets the course criteria by emphasizing time-to-value through rapid iterations, implementing CI/CD to support frequent safe releases, and using measurable evaluation criteria (especially time-to-acknowledgement). It remains focused on engineering workflow and scalability readiness rather than research-driven novelty.
+This project proposes a deployable web platform for efficient campus resource allocation and conflict resolution. It meets the course criteria by emphasizing time-to-value through rapid iterations, adopting CI/CD for frequent and reliable releases, and evaluating performance using measurable metrics such as Conflict Resolution Coverage. The project focuses on practical workflow automation, system reliability, and scalability rather than research-driven algorithmic novelty.
 
 \end{document}
