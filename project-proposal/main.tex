@@ -136,22 +136,21 @@ Recommendations will use a rule-based ranking approach:
     \item Present the top-ranked alternatives to the coordinator for final selection; the system will not automatically relocate or cancel activities.
 \end{itemize}
 
-
 \subsection{Web architecture %
 \BvrHint{\ldots web-based solution}}
 A typical 3-tier web architecture:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} responsive UI for citizens and staff (status pages, submission form, dashboard).
-    \item \textbf{Backend API:} authentication, complaint submission, status transitions, assignment logic.
-    \item \textbf{Database:} store users, complaints, status history, attachments metadata.
+    \item \textbf{Frontend:} Responsive interface for coordinators, faculty, and students, including venue booking, conflict views, recommendations, and notifications.
+    \item \textbf{Backend API:} Handles authentication, booking requests, conflict detection, room recommendation, allocation updates, and notification workflows.
+    \item \textbf{Database:} Stores users, rooms, resource specifications, bookings, conflict records, activity details, and allocation history.
 \end{itemize}
 
 \subsection{CI/CD and fast delivery enabler}
 CI/CD will be used to:
 \begin{itemize}[leftmargin=0.7cm]
-    \item Automatically build and run tests on every change.
-    \item Produce repeatable deployment artifacts to staging.
-    \item Enable safe and frequent releases of incremental features.
+    \item Automatically build and execute tests for every code change.
+    \item Generate consistent, reproducible deployment artifacts for staging.
+    \item Support frequent and reliable releases of incremental features.
 \end{itemize}
 
 \section{Evaluation Criterion %
