@@ -77,27 +77,28 @@ This project aims to streamline university workflows and improve learning by red
 \end{itemize}
 
 
+
 \section{Problem Statement}
-Citizens in a tier-2/3 Indian city face delays and uncertainty when reporting local issues (e.g., streetlight outages, water leakage, garbage accumulation, road potholes). Common pain points include:
+Campus lecture halls and laboratories are often reallocated for placement activities, orientations, and other institutional events without timely notification to the affected batches and faculty. This results in last-minute class cancellations and inefficient venue reassignment due to the lack of readily available alternatives. Common operational pain points include:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Fragmentation:} complaints are often made via multiple channels (calls, social media, paper forms), causing lost context.
-    \item \textbf{Low transparency:} citizens cannot easily see the status of their complaint (e.g., ``received'', ``assigned'', ``in progress'', ``resolved'').
-    \item \textbf{Slow coordination:} departments/field teams lack a unified, trackable workflow with clear ownership.
-    \item \textbf{Poor data quality:} duplicate or incomplete reports force rework and extend resolution time.
+    \item \textbf{Delayed resource conflict notification:} Faculty and students are often informed late, or not informed at all, when their allocated classrooms or laboratories are preempted.
+    \item \textbf{No alternative venue recommendations:} The current process does not always identify and suggest suitable replacement rooms based on capacity, availability, or facility requirements.
+    \item \textbf{Manual, communication-dependent workflow:} Venue changes rely heavily on emails and manual coordination, increasing the risk of missed updates, inconsistent information, and delayed resolution.
+    \item \textbf{Limited allocation transparency:} Students and faculty lack a centralized view of venue availability, booking changes, and the status of resource conflicts.
 \end{itemize}
 
-\textbf{Why this matters now (contextual relevance):} In an urban setting with limited staff bandwidth, even small process improvements can noticeably reduce resolution delays and repeated submissions.
+\textbf{Why this matters now (contextual relevance):} During placement examinations for pre-final and final-year students, campus resources can remain occupied until 8 PM, creating conflicts with scheduled laboratory sessions. Many of these disruptions could be mitigated through intelligent reassignment—for example, relocating a lab session to an available classroom in Blocks D, E, or F while allowing students to use their own laptops.
 
 \section{Proposed Solution %
 \BvrHint{\ldots Software Proposition}}
 \subsection{Overview}
-Build a \textbf{web-based} ``Grievance-to-Resolution'' system with the following components:
+Build a \textbf{web-based} “Conflict-to-Resolution” system with the following components:
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Citizen submission portal:} users submit an issue with photo (optional), category, and locality/ward.
-    \item \textbf{Automated triage:} basic duplicate detection and completeness checks.
-    \item \textbf{Department workflow:} assign issues to relevant department/team and update statuses.
-    \item \textbf{Status transparency:} citizens track status and receive notifications when resolved.
-    \item \textbf{Admin/ops dashboard:} performance summaries (resolution time, backlog).
+    \item \textbf{Venue booking portal:} Timetable coordinators submit booking requests specifying required capacity, facilities (projectors, computers, etc.), time slot, and activity type (lecture, placement examination, orientation, etc.).
+    \item \textbf{Automated conflict detection:} The system validates requests against existing bookings and generates alerts when resource conflicts or double bookings are detected.
+    \item \textbf{Alternative venue recommendation:} For conflicting requests, the system identifies suitable available venues based on capacity, required facilities, and time constraints.
+    \item \textbf{Conflict resolution workflow:} Coordinators can review the conflicting activities and select an appropriate action, such as relocating or rescheduling a lower-priority activity.
+    \item \textbf{Automated notifications:} Affected students and faculty are notified immediately when a scheduled activity is relocated, suspended, or otherwise modified.
 \end{itemize}
 
 \subsection{Core workflow}
