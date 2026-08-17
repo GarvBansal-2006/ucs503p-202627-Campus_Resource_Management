@@ -159,173 +159,24 @@ CI/CD will be used to:
 \usepackage{graphicx}
 \usepackage{xcolor}
 
-% -----------------------------------------------------
-% bvraghav-tiet-ucs503p-article.sty
-% -----------------------------------------------------
-
-% Variable: Lab Instructor
-\makeatletter \newcommand{\BvrSetLabInstructor}[1]{%
-  \gdef\Bvr@LabInstructor{#1}}
-% default
-\newcommand{\Bvr@LabInstructor}{Dr. Jeelani %
-  Asif}
-% public accessor
-\newcommand{\BvrLabInstructorValue}{\Bvr@LabInstructor}
-\makeatother
-
-% Add subtitle
-\usepackage{titling}
-% -- Set title bold
-\pretitle{\begin{center}\bfseries\fontsize{18bp}{18bp}\selectfont}
-\makeatletter
-\newcommand{\BvrSubtitle}[1]{%
-  \posttitle{%
-    \par\end{center}
-    \begin{center}\large#1\end{center}
-    \vskip 0.5em}%
-}
-\makeatother
-
-% Hints in the section title(s)
-\newcommand{\BvrHint}[1]{%
-  {\normalfont\normalsize\itshape\hfill #1}}
-
-% -----------------------------------------------------
-
-\title{Conflict Resolution System for a University Campus}
-
-\BvrSetLabInstructor{Dr. Jeelani Asif}
-
-\BvrSubtitle{%
-  Project Proposal for UCS503P  \\
-  Submitted to: \BvrLabInstructorValue \\ \bfseries
-  Thapar Institute of Engineering and Technology% 
-}
-
-\author{
-  Arhana Mor, CSED%
-  \thanks{Roll No: \texttt{1024030773}, %
-    Email: \texttt{amor\_be24\@thapar.edu}}
-  \and 
-  Garv Bansal, CSED%
-  \thanks{Roll No: \texttt{1024030988}, %
-    Email: \texttt{gbansal\_be24\@thapar.edu}}
-}
-
-\date{\today}
-
-\begin{document}
-\maketitle
-
-\section{Higher-order goal%
-  \BvrHint{\ldots secondary framing}}
-This project aims to streamline university workflows and improve learning by reducing the time and effort required to allocate campus resources, including classrooms, Digi Spaces, and laboratories. The immediate engineering objective is to develop a measurable and deployable software solution for 
- \emph{automated conflict detection and resolution in venue bookings.} 
-
-\section{Time-to-value %
-\BvrHint{\ldots primary heuristic}}
-\begin{itemize}[leftmargin=0.7cm]
-    \item We will accelerate value delivery by rapidly prototyping the core workflow and validating it with end users within each short development cycle.
-    \item We will favor continuous feedback over premature optimization, using weekly iterations and early CI-backed automation to minimize deployment overhead.
-    \item Initial success will be measured through tangible, testable outcomes from the first iteration, with subsequent releases driven by validated user feedback.
-\end{itemize}
-
-
-
-\section{Problem Statement}
-Campus lecture halls and laboratories are often reallocated for placement activities, orientations, and other institutional events without timely notification to the affected batches and faculty. This results in last-minute class cancellations and inefficient venue reassignment due to the lack of readily available alternatives. Common operational pain points include:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Delayed resource conflict notification:} Faculty and students are often informed late, or not informed at all, when their allocated classrooms or laboratories are preempted.
-    \item \textbf{No alternative venue recommendations:} The current process does not always identify and suggest suitable replacement rooms based on capacity, availability, or facility requirements.
-    \item \textbf{Manual, communication-dependent workflow:} Venue changes rely heavily on emails and manual coordination, increasing the risk of missed updates, inconsistent information, and delayed resolution.
-    \item \textbf{Limited allocation transparency:} Students and faculty lack a centralized view of venue availability, booking changes, and the status of resource conflicts.
-\end{itemize}
-
-\textbf{Why this matters now (contextual relevance):} During placement examinations for pre-final and final-year students, campus resources can remain occupied until 8 PM, creating conflicts with scheduled laboratory sessions. Many of these disruptions could be mitigated through intelligent reassignment—for example, relocating a lab session to an available classroom in Blocks D, E, or F while allowing students to use their own laptops.
-
-\section{Proposed Solution %
-\BvrHint{\ldots Software Proposition}}
-\subsection{Overview}
-Build a \textbf{web-based} “Conflict-to-Resolution” system with the following components:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Venue booking portal:} Timetable coordinators submit booking requests specifying required capacity, facilities (projectors, computers, etc.), time slot, and activity type (lecture, placement examination, orientation, etc.).
-    \item \textbf{Automated conflict detection:} The system validates requests against existing bookings and generates alerts when resource conflicts or double bookings are detected.
-    \item \textbf{Alternative venue recommendation:} For conflicting requests, the system identifies suitable available venues based on capacity, required facilities, and time constraints.
-    \item \textbf{Conflict resolution workflow:} Coordinators can review the conflicting activities and select an appropriate action, such as relocating or rescheduling a lower-priority activity.
-    \item \textbf{Automated notifications:} Affected students and faculty are notified immediately when a scheduled activity is relocated, suspended, or otherwise modified.
-\end{itemize}
-
-\subsection{Core workflow}
-\begin{enumerate}[leftmargin=0.7cm]
-    \item The coordinator defines the venue requirements, including seating capacity, required resources, time slot, and activity type, or directly specifies a preferred room (e.g., LT402).
-    \item The system evaluates available rooms against the specified constraints and ranks suitable venues based on resource and scheduling compatibility.
-    \item The coordinator selects a preferred venue from the available options.
-    \item If the selected venue is already occupied, the system displays the conflicting activity, expected occupancy, required resources, and responsible faculty member or supervisor.
-    \item The coordinator determines which activity retains the venue based on factors such as activity priority, timing, and resource requirements.
-    \item For the displaced activity, the system identifies and recommends currently unoccupied venues that satisfy its capacity, resource, and scheduling requirements.
-    \item The coordinator selects an alternative venue or cancels/reschedules the affected activity. The system records the resolution and notifies the relevant students and faculty.
-\end{enumerate}
-
-
-
-\subsection{Operational constraints for a University Campus}
-\begin{itemize}[leftmargin=0.7cm]
-    \item Ensure the web application remains responsive and functional on low-to-mid-range devices and variable campus network conditions.
-    \item Prioritize deterministic conflict detection, constraint-based venue matching, and workflow automation over computationally intensive or research-oriented algorithms.
-    \item Use widely supported web technologies, standard hosting infrastructure, and managed databases to enable cost-effective deployment and maintenance.
-    \item Design the system to handle concurrent booking requests and updates while maintaining consistent room availability and allocation state.
-\end{itemize}
-
-\section{Solution Approach %
-\BvrHint{\ldots Engineering focus}}
-This engineering project prioritizes scalable administrative workflows and reliable system automation over the development of research-oriented techniques.
-
-\subsection{Resource Recommendations %
-\BvrHint{\ldots non-research}}
-Recommendations will use a rule-based ranking approach:
-\begin{itemize}[leftmargin=0.7cm]
-    \item Match required constraints such as capacity, facilities, activity type, and time slot against eligible resources.
-    \item Rank unoccupied rooms above occupied rooms. For occupied rooms, display basic conflict details such as the current activity, batch, faculty/supervisor, and occupancy duration.
-    \item For a conflict, recommend alternative rooms for both activities. If no suitable unoccupied room exists, consider relaxed alternatives based on factors such as greater distance or reduced resource availability while preserving essential constraints.
-    \item Present the top-ranked alternatives to the coordinator for final selection; the system will not automatically relocate or cancel activities.
-\end{itemize}
-
-\subsection{Web architecture %
-\BvrHint{\ldots web-based solution}}
-A typical 3-tier web architecture:
-\begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Frontend:} Responsive interface for coordinators, faculty, and students, including venue booking, conflict views, recommendations, and notifications.
-    \item \textbf{Backend API:} Handles authentication, booking requests, conflict detection, room recommendation, allocation updates, and notification workflows.
-    \item \textbf{Database:} Stores users, rooms, resource specifications, bookings, conflict records, activity details, and allocation history.
-\end{itemize}
-
-\subsection{CI/CD and fast delivery enabler}
-CI/CD will be used to:
-\begin{itemize}[leftmargin=0.7cm]
-    \item Automatically build and execute tests for every code change.
-    \item Generate consistent, reproducible deployment artifacts for staging.
-    \item Support frequent and reliable releases of incremental features.
-\end{itemize}
-
 \section{Evaluation Criterion %
 \BvrHint{\ldots measurable and attributable}}
-We define success using measurable metrics tied to the core workflow.
+We will evaluate using quantitative metrics directly tied to the core venue-allocation workflow.
 
 \subsection{Primary evaluation metric}
-\textbf{Time-to-acknowledgement (TTA):} time between complaint submission and ``Received/Assigned'' status creation in the system.
+\textbf{Alternative Recommendation Validity:} Percentage of system-generated recommendations that satisfy all mandatory constraints and are available for the requested time slot.
 \begin{itemize}[leftmargin=0.7cm]
-    \item Target: median TTA $\le$ 2 hours during pilot window.
-    \item Attribution: measured from database timestamps (submission vs. first status update by staff).
+    \item Target: $\geq$ 95\% (calculated using (valid recommendations / total recommendations) × 100)
+    \item Attribution: Validity is verified against the booking and room-resource data stored in the database.
 \end{itemize}
 
 \subsection{Secondary evaluation metrics}
 \begin{itemize}[leftmargin=0.7cm]
-    \item \textbf{Resolution time reduction:} reduce time-to-resolved compared to baseline process (even if baseline is collected via survey).
-    \item \textbf{Duplicate rate:} percentage of complaints flagged as duplicates and resolved without rework.
-    \item \textbf{User clarity:} citizen-reported clarity of status using a simple 1--5 feedback question.
-    \item \textbf{Reliability:} availability of staging/production for login and submission during business hours (e.g., $\ge$ 99\% uptime in pilot).
+    \item \textbf{Recommendation Proximity:} distance between the original venue and the recommended alternative, measured using predefined campus coordinates.
+    \item \textbf{Conflict Resolution Coverage:} Percentage of detected conflicts for which the system generates at least one feasible alternative for either affected activity.
+    \item \textbf{Notification Delivery Rate:} Percentage of affected users for whom a notification delivery event is successfully recorded.
+    \item \textbf{Workflow Efficiency:} Number of manual actions required by the coordinator to identify a feasible alternative and record the resolution.
 \end{itemize}
-
 
 \subsection{Pilot validation plan %
 \BvrHint{\ldots high-level}}
