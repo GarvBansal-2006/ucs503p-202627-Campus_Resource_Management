@@ -1,0 +1,1790 @@
+/* =========================================
+   GLOBAL
+   ========================================= */
+
+   * {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    background-image:
+        linear-gradient(
+            rgba(220, 242, 255, 0.38),
+            rgba(220, 242, 255, 0.38)
+        ),
+        url("Tracker.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    color: #14205c;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.siteHeader {
+
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5vw;
+
+    border-bottom:
+        1px solid rgba(24, 0, 173, 0.12);
+
+    background:
+        rgba(240, 249, 255, 0.72);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: #1800ad;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    font-size: 14px;
+}
+
+
+.brandMark {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 10px;
+
+    background: #1800ad;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+.headerStatus {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #38607a;
+
+    letter-spacing: 0.7px;
+}
+
+
+.statusDot {
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #00a82d;
+
+    box-shadow:
+        0 0 0 4px rgba(0, 168, 45, 0.12);
+}
+
+
+/* =========================================
+   PAGE
+   ========================================= */
+
+.pageContainer {
+
+    width: min(1200px, 90%);
+
+    margin: 0 auto;
+
+    padding: 55px 0 80px;
+}
+
+
+.intro {
+
+    margin-bottom: 35px;
+}
+
+
+.eyebrow {
+
+    margin: 0 0 8px;
+
+    color: #5368b4;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.intro h1 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-family:
+        "Copperplate",
+        "Copperplate Gothic Bold",
+        "Georgia",
+        serif;
+
+    font-size: clamp(42px, 5vw, 64px);
+
+    line-height: 1;
+}
+
+
+.introText {
+
+    margin: 15px 0 0;
+
+    color: #53677c;
+
+    font-size: 17px;
+
+    max-width: 600px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   BOOKING LAYOUT
+   ========================================= */
+
+.bookingLayout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(280px, 1fr);
+
+    gap: 24px;
+
+    align-items: start;
+}
+
+
+/* =========================================
+   BOOKING CARD
+   ========================================= */
+
+.bookingCard {
+
+    background:
+        rgba(201, 230, 254, 0.91);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.65);
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 70px rgba(47, 105, 150, 0.14);
+}
+
+
+.cardHeader {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 28px 32px;
+
+    border-bottom:
+        1px solid rgba(24, 0, 173, 0.1);
+}
+
+
+.cardEyebrow {
+
+    margin: 0 0 5px;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    font-weight: 800;
+
+    color: #6174b6;
+}
+
+
+.cardHeader h2 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-size: 25px;
+}
+
+
+.stepNumber {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.5);
+
+    color: #1800ad;
+
+    font-weight: 900;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   FORM
+   ========================================= */
+
+.formBody {
+
+    padding: 30px 32px;
+}
+
+
+.formGroup {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.formGroup label {
+
+    color: #263a68;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+.formGroup input {
+
+    width: 100%;
+
+    height: 50px;
+
+    padding: 0 16px;
+
+    border:
+        1px solid rgba(24, 0, 173, 0.18);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        rgba(240, 249, 255, 0.62);
+
+    color: #14205c;
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    transition:
+        border 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+
+.formGroup input::placeholder {
+
+    color: #809bc4;
+
+}
+
+
+.formGroup input:focus {
+
+    border-color: #1800ad;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px rgba(24, 0, 173, 0.08);
+}
+
+
+.formBody > .formGroup {
+
+    margin-bottom: 20px;
+}
+
+
+.timeRow {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+}
+
+
+/* =========================================
+   FORM FOOTER
+   ========================================= */
+
+.formFooter {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 22px 32px;
+
+    background:
+        rgba(190, 222, 248, 0.55);
+
+    border-top:
+        1px solid rgba(24, 0, 173, 0.08);
+}
+
+
+.formFooter p {
+
+    margin: 0;
+
+    max-width: 340px;
+
+    color: #5e7590;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.primaryButton {
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 14px 20px;
+
+    background: #1800ad;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.6px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        background 0.2s;
+}
+
+
+.primaryButton:hover {
+
+    background: #12008b;
+
+    transform: translateY(-2px);
+}
+
+
+.primaryButton span {
+
+    font-size: 18px;
+
+    line-height: 10px;
+}
+
+
+/* =========================================
+   INFO PANEL
+   ========================================= */
+
+.infoPanel {
+
+    padding: 27px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(239, 248, 255, 0.74);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.7);
+
+    backdrop-filter: blur(12px);
+
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 20px 60px rgba(47, 105, 150, 0.1);
+}
+
+
+.infoHeading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px solid rgba(24, 0, 173, 0.1);
+}
+
+
+.infoIcon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 28px;
+
+    height: 28px;
+
+    border-radius: 8px;
+
+    background: #1800ad;
+
+    color: white;
+
+    font-weight: 900;
+}
+
+
+.infoHeading h2 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-size: 18px;
+}
+
+
+/* =========================================
+   WORKFLOW
+   ========================================= */
+
+.workflow {
+
+    padding: 22px 0;
+}
+
+
+.workflowItem {
+
+    display: grid;
+
+    grid-template-columns: 35px 1fr;
+
+    gap: 13px;
+}
+
+
+.workflowNumber {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 8px;
+
+    background: #d6ecff;
+
+    color: #1800ad;
+
+    font-size: 10px;
+
+    font-weight: 900;
+}
+
+
+.workflowItem h3 {
+
+    margin: 2px 0 5px;
+
+    color: #233767;
+
+    font-size: 13px;
+}
+
+
+.workflowItem p {
+
+    margin: 0;
+
+    color: #71859b;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.workflowLine {
+
+    width: 1px;
+
+    height: 25px;
+
+    margin: 5px 0 5px 14px;
+
+    background:
+        rgba(24, 0, 173, 0.15);
+}
+
+
+/* =========================================
+   INFO FOOTER
+   ========================================= */
+
+.infoFooter {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding-top: 15px;
+
+    border-top:
+        1px solid rgba(24, 0, 173, 0.1);
+
+    color: #48715b;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 850px) {
+
+    .bookingLayout {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .infoPanel {
+
+        display: none;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .siteHeader {
+
+        padding: 0 20px;
+    }
+
+
+    .brandText {
+
+        display: none;
+    }
+
+
+    .headerStatus {
+
+        font-size: 9px;
+    }
+
+
+    .pageContainer {
+
+        width: 92%;
+
+        padding-top: 35px;
+    }
+
+
+    .cardHeader {
+
+        padding: 22px;
+    }
+
+
+    .formBody {
+
+        padding: 25px 22px;
+    }
+
+
+    .formFooter {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 20px 22px;
+    }
+
+
+    .primaryButton {
+
+        justify-content: center;
+    }
+
+
+    .timeRow {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   GLOBAL
+   ========================================= */
+
+   * {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background-image:
+        linear-gradient(
+            rgba(220, 242, 255, 0.38),
+            rgba(220, 242, 255, 0.38)
+        ),
+        url("Tracker.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    color: #14205c;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.siteHeader {
+
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 5vw;
+
+    background:
+        rgba(240, 249, 255, 0.72);
+
+    border-bottom:
+        1px solid rgba(24, 0, 173, 0.12);
+
+    backdrop-filter: blur(14px);
+
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: #1800ad;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.brandMark {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 10px;
+
+    background: #1800ad;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+.headerStatus {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #38607a;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+
+.statusDot {
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #00a82d;
+
+    box-shadow:
+        0 0 0 4px rgba(0, 168, 45, 0.12);
+}
+
+
+/* =========================================
+   MAIN
+   ========================================= */
+
+.pageContainer {
+
+    width: min(1200px, 90%);
+
+    margin: auto;
+
+    padding: 50px 0 80px;
+}
+
+
+.pageIntro {
+
+    display: flex;
+
+    align-items: end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 30px;
+}
+
+
+.eyebrow {
+
+    margin: 0 0 7px;
+
+    color: #5368b4;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+
+.pageIntro h1 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-family:
+        "Copperplate",
+        "Copperplate Gothic Bold",
+        "Georgia",
+        serif;
+
+    font-size: clamp(40px, 5vw, 60px);
+
+    line-height: 1;
+}
+
+
+.pageIntro > div > p:last-child {
+
+    margin: 14px 0 0;
+
+    color: #5e7590;
+
+    font-size: 15px;
+}
+
+
+.resolutionStep {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: end;
+
+    gap: 4px;
+
+    color: #70859c;
+}
+
+
+.resolutionStep span {
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    font-weight: 900;
+}
+
+
+.resolutionStep strong {
+
+    color: #1800ad;
+
+    font-size: 20px;
+}
+
+
+/* =========================================
+   CONFLICT
+   ========================================= */
+
+.conflictBanner {
+
+    display: flex;
+
+    gap: 20px;
+
+    padding: 23px 25px;
+
+    margin-bottom: 20px;
+
+    background:
+        rgba(255, 244, 244, 0.88);
+
+    border:
+        1px solid rgba(220, 50, 50, 0.18);
+
+    border-left:
+        5px solid #e33d3d;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 35px rgba(130, 60, 60, 0.08);
+}
+
+
+.conflictIcon {
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: #ffe0e0;
+
+    color: #d72d2d;
+
+    font-size: 23px;
+
+    font-weight: 900;
+}
+
+
+.conflictInformation {
+
+    flex: 1;
+}
+
+
+.conflictTitle {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 5px;
+
+    color: #d32e2e;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+.conflictBadge {
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #ffe0e0;
+
+    color: #c42e2e;
+
+    font-size: 8px;
+}
+
+
+.conflictInformation h2 {
+
+    margin: 0 0 10px;
+
+    color: #4d3340;
+
+    font-size: 22px;
+}
+
+
+.requestDetails {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.requestDetails span {
+
+    padding: 6px 9px;
+
+    border-radius: 7px;
+
+    background: rgba(255, 255, 255, 0.7);
+
+    color: #6c6670;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================
+   SUMMARY
+   ========================================= */
+
+.summaryGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 42px;
+}
+
+
+.summaryCard {
+
+    min-height: 130px;
+
+    padding: 20px;
+
+    background:
+        rgba(229, 243, 255, 0.78);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.75);
+
+    border-radius: 14px;
+}
+
+
+.summaryLabel {
+
+    margin: 0 0 12px;
+
+    color: #70859c;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.3px;
+}
+
+
+.summaryCard h2 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-size: 27px;
+}
+
+
+.summarySubtext {
+
+    display: block;
+
+    margin-top: 5px;
+
+    color: #70859c;
+
+    font-size: 11px;
+}
+
+
+.facilityList {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+
+.facilityList span {
+
+    padding: 6px 8px;
+
+    border-radius: 6px;
+
+    background: #d5ebff;
+
+    color: #34527a;
+
+    font-size: 9px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================
+   SECTION HEADING
+   ========================================= */
+
+.sectionHeading {
+
+    display: flex;
+
+    align-items: end;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+
+.sectionHeading h2 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-size: 25px;
+}
+
+
+.resultCount {
+
+    padding: 7px 10px;
+
+    border-radius: 7px;
+
+    background: #dff5e5;
+
+    color: #14702d;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================
+   ROOM GRID
+   ========================================= */
+
+.roomGrid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 17px;
+}
+
+
+.roomCard {
+
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 22px;
+
+    min-height: 390px;
+
+    background:
+        rgba(239, 248, 255, 0.88);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 45px rgba(47, 105, 150, 0.09);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+
+.roomCard:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 20px 55px rgba(47, 105, 150, 0.15);
+}
+
+
+.roomCard.bestMatch {
+
+    border:
+        2px solid rgba(24, 0, 173, 0.18);
+}
+
+
+/* =========================================
+   ROOM TOP
+   ========================================= */
+
+.roomTop {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+}
+
+
+.matchBadge {
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #dce7ff;
+
+    color: #1800ad;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+}
+
+
+.matchBadge.alternative {
+
+    background: #edf0f4;
+
+    color: #617386;
+}
+
+
+.matchScore {
+
+    color: #1800ad;
+
+    font-size: 19px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================
+   ROOM TITLE
+   ========================================= */
+
+.roomTitle {
+
+    margin-bottom: 15px;
+}
+
+
+.roomTitle h3 {
+
+    margin: 0;
+
+    color: #1800ad;
+
+    font-size: 32px;
+}
+
+
+.roomTitle span {
+
+    color: #71859b;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    width: fit-content;
+
+    padding: 6px 9px;
+
+    margin-bottom: 22px;
+
+    border-radius: 999px;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+}
+
+
+.status i {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+.status.available {
+
+    color: #08752a;
+
+    background: #dff7e6;
+}
+
+
+/* =========================================
+   ROOM STATS
+   ========================================= */
+
+.roomStats {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    border-top:
+        1px solid rgba(24, 0, 173, 0.09);
+
+    border-bottom:
+        1px solid rgba(24, 0, 173, 0.09);
+
+    padding: 15px 0;
+
+    margin-bottom: 18px;
+}
+
+
+.roomStats div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.roomStats div + div {
+
+    padding-left: 15px;
+
+    border-left:
+        1px solid rgba(24, 0, 173, 0.09);
+}
+
+
+.roomStats strong {
+
+    color: #233767;
+
+    font-size: 19px;
+}
+
+
+.roomStats span {
+
+    color: #71859b;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================
+   MATCHED REQUIREMENTS
+   ========================================= */
+
+.matchedRequirements {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    margin-bottom: 20px;
+}
+
+
+.matchedRequirements p {
+
+    margin: 0 0 3px;
+
+    color: #71859b;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+.matchedRequirements span {
+
+    color: #426079;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   BUTTON
+   ========================================= */
+
+.selectButton {
+
+    width: 100%;
+
+    margin-top: auto;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #1800ad;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    cursor: pointer;
+}
+
+
+.selectButton span {
+
+    font-size: 17px;
+}
+
+
+/* =========================================
+   ANNOUNCEMENTS
+   ========================================= */
+
+.announcementSection {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    margin-top: 45px;
+
+    padding: 20px 23px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(239, 248, 255, 0.72);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.7);
+}
+
+
+.announcementIcon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: #dcecff;
+
+    color: #1800ad;
+
+    font-weight: 900;
+}
+
+
+.announcementSection .eyebrow {
+
+    margin-bottom: 4px;
+}
+
+
+.announcementSection h2 {
+
+    margin: 0;
+
+    color: #283c69;
+
+    font-size: 15px;
+}
+
+
+.announcementSection p:last-child {
+
+    margin: 5px 0 0;
+
+    color: #71859b;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 900px) {
+
+    .summaryGrid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .roomGrid {
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .siteHeader {
+
+        padding: 0 20px;
+    }
+
+
+    .brandText {
+
+        display: none;
+    }
+
+
+    .pageContainer {
+
+        width: 92%;
+
+        padding-top: 35px;
+    }
+
+
+    .pageIntro {
+
+        align-items: start;
+
+        flex-direction: column;
+    }
+
+
+    .resolutionStep {
+
+        align-items: start;
+    }
+
+
+    .summaryGrid {
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    .roomGrid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .conflictBanner {
+
+        padding: 18px;
+    }
+
+
+    .conflictTitle {
+
+        flex-wrap: wrap;
+    }
+}
+
+
+@media (max-width: 430px) {
+
+    .summaryGrid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .requestDetails {
+
+        flex-direction: column;
+
+        align-items: start;
+    }
+
+
+    .announcementSection {
+
+        align-items: start;
+    }
+}
