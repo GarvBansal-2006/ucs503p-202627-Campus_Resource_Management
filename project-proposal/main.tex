@@ -68,8 +68,7 @@
 This project aims to streamline university workflows and improve learning by reducing the time and effort required to allocate campus resources, including classrooms, Digi Spaces, and laboratories. The immediate engineering objective is to develop a measurable and deployable software solution for 
  \emph{automated conflict detection and resolution in venue bookings.} 
 
-\section{Time-to-value %
-\BvrHint{\ldots primary heuristic}}
+\section{Time-to-value }
 \begin{itemize}[leftmargin=0.7cm]
     \item We will accelerate value delivery by rapidly prototyping the core workflow and validating it with end users within each short development cycle.
     \item We will favor continuous feedback over premature optimization, using weekly iterations and early CI-backed automation to minimize deployment overhead.
@@ -89,8 +88,7 @@ Campus lecture halls and laboratories are often reallocated for placement activi
 
 \textbf{Why this matters now (contextual relevance):} During placement examinations for pre-final and final-year students, campus resources can remain occupied until 8 PM, creating conflicts with scheduled laboratory sessions. Many of these disruptions could be mitigated through intelligent reassignment—for example, relocating a lab session to an available classroom in Blocks D, E, or F while allowing students to use their own laptops.
 
-\section{Proposed Solution %
-\BvrHint{\ldots Software Proposition}}
+\section{Proposed Solution }
 \subsection{Overview}
 Build a \textbf{web-based} “Conflict-to-Resolution” system with the following components:
 \begin{itemize}[leftmargin=0.7cm]
@@ -122,12 +120,10 @@ Build a \textbf{web-based} “Conflict-to-Resolution” system with the followin
     \item Design the system to handle concurrent booking requests and updates while maintaining consistent room availability and allocation state.
 \end{itemize}
 
-\section{Solution Approach %
-\BvrHint{\ldots Engineering focus}}
+\section{Solution Approach }
 This engineering project prioritizes scalable administrative workflows and reliable system automation over the development of research-oriented techniques.
 
-\subsection{Resource Recommendations %
-\BvrHint{\ldots non-research}}
+\subsection{Resource Recommendations }
 Recommendations will use a rule-based ranking approach:
 \begin{itemize}[leftmargin=0.7cm]
     \item Match required constraints such as capacity, facilities, activity type, and time slot against eligible resources.
@@ -136,8 +132,7 @@ Recommendations will use a rule-based ranking approach:
     \item Present the top-ranked alternatives to the coordinator for final selection; the system will not automatically relocate or cancel activities.
 \end{itemize}
 
-\subsection{Web architecture %
-\BvrHint{\ldots web-based solution}}
+\subsection{Web architecture }
 A typical 3-tier web architecture:
 \begin{itemize}[leftmargin=0.7cm]
     \item \textbf{Frontend:} Responsive interface for coordinators, faculty, and students, including venue booking, conflict views, recommendations, and notifications.
@@ -153,8 +148,14 @@ CI/CD will be used to:
     \item Support frequent and reliable releases of incremental features.
 \end{itemize}
 
-\section{Evaluation Criterion %
-\BvrHint{\ldots measurable and attributable}}
+\subsection{Activity Diagram}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{activityDiagram.pdf}
+    \label{fig:activity-diagram}
+\end{figure}
+
+\section{Evaluation Criterion }
 We will evaluate using quantitative metrics directly tied to the core venue-allocation workflow.
 
 \subsection{Primary evaluation metric}
@@ -172,8 +173,7 @@ We will evaluate using quantitative metrics directly tied to the core venue-allo
     \item \textbf{Workflow Efficiency:} Number of manual actions required by the coordinator to identify a feasible alternative and record the resolution.
 \end{itemize}
 
-\subsection{Pilot validation plan %
-\BvrHint{\ldots high-level}}
+\subsection{Pilot validation plan }
 \begin{itemize}[leftmargin=0.7cm]
     \item Conduct a pilot with 1 coordinator, 1 lecturer affected by a venue conflict, and 10–15 student participants to validate the deployed prototype.
     \item Evaluate the core workflow, including conflict detection, alternative-room recommendations, booking updates, and notification delivery.
@@ -181,8 +181,7 @@ We will evaluate using quantitative metrics directly tied to the core venue-allo
 \end{itemize}
 
 
-\section{Scalability %
-\BvrHint{\ldots with foresight}}
+\section{Scalability}
 The proposed system is designed to scale both in terms of system load and practical deployment requirements.
 
 \begin{enumerate}[leftmargin=0.7cm]
@@ -213,10 +212,8 @@ A mature software stack is available to implement the proposed campus resource a
 \end{itemize}
 These established components allow the project to focus on workflow automation, allocation correctness, and measurable performance rather than developing the infrastructure from scratch.
 
-\section{Project scope and deliverables %
-\BvrHint{\ldots iteration-friendly}}
-\subsection{Initial deliverable %
-\BvrHint{\ldots first iteration}}
+\section{Project scope and deliverables }
+\subsection{Initial deliverable }
 \begin{itemize}[leftmargin=0.7cm]
     \item Venue requirement form + Conflict detection
     \item Post-conflict recommendations: System recommends only currently unoccupied rooms that satisfy the affected activity's requirements.
