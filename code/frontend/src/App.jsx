@@ -26,7 +26,7 @@ function App() {
       <nav style={navStyle}>
         <Link to="/" style={linkStyle}>Faculty Booking</Link>
         {/* <Link to="/admin" style={linkStyle}>Admin Dashboard</Link> */}
-        {/* <Link to="/student" style={linkStyle}>Student Portal</Link> */}
+        <Link to="/student" style={linkStyle}>Student Portal</Link>
       </nav>
 
       <Routes>
