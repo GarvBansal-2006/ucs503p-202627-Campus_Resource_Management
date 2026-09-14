@@ -20,8 +20,8 @@
 
 | Role | Team Member | Roll Number | Email | Department |
 | :--- | :--- | :--- | :--- | :--- |
-| **Frontend Architect & UI/UX Lead** | **Arhana Mor** | `1024030773` | [`amor_be24@thapar.edu`](mailto:amor_be24@thapar.edu) | Computer Science & Engineering |
-| **Project Lead, Backend Architect, & Git Coordinator** | **Garv Bansal** | `1024030988` | [`gbansal_be24@thapar.edu`](mailto:gbansal_be24@thapar.edu) | Computer Science & Engineering |
+| **Frontend Architect & UI/UX Lead** | **Arhana Mor** | <span style="white-space: nowrap;">`1024030773`</span> | <span style="white-space: nowrap;">[`amor_be24@thapar.edu`](mailto:amor_be24@thapar.edu)</span> | Computer Science & Engineering |
+| **Project Lead, Backend Architect, & Git Coordinator** | **Garv Bansal** | <span style="white-space: nowrap;">`1024030988`</span> | <span style="white-space: nowrap;">[`gbansal_be24@thapar.edu`](mailto:gbansal_be24@thapar.edu)</span> | Computer Science & Engineering |
 
 * **Academic Supervisor & Lab Instructor:** **Dr. Jeelani Asif** (Department of Computer Science & Engineering, TIET Patiala)
 * **Course Code:** UCS503P — Software Engineering Project (Academic Year 2026–27)
