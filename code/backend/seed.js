@@ -26,7 +26,7 @@ const seedDatabase = async () => {
             { roomNumber: 'LT402', capacity: 150, type: 'Lecture Hall' },
             { roomNumber: 'LT403', capacity: 150, type: 'Lecture Hall' },
             { roomNumber: 'LT101', capacity: 250, type: 'Lecture Hall' },
-            { roomNumber: 'LP104', capacity: 150, type: 'Lecture Hall' }, // Used for lectures Thursday
+            { roomNumber: 'LP104', capacity: 150, type: 'Lecture Hall' }, 
             
             // Labs / Practicals (Capacity 35)
             { roomNumber: 'IS2(L409)', capacity: 35, type: 'Lab' },

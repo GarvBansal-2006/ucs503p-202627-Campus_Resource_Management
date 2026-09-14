@@ -10,7 +10,6 @@ function ConflictResolution() {
 
   const { request, result } = location.state;
 
-  // Determine the page headers based on the 3 possible states
   let eyebrowText = "SUCCESS";
   let pageTitle = "Venue Available!";
   let pageDescription = "Your requested room is vacant during this time slot.";
