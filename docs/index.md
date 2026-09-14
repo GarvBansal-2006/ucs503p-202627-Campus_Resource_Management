@@ -32,10 +32,11 @@
 
 Campus lecture halls and laboratories are often reallocated for placement activities, orientations, and other institutional events without timely notification to the affected batches and faculty. This results in last-minute class cancellations and inefficient venue reassignment due to the lack of readily available alternatives.
 
-!!! abstract "The Conflict Resolution Problem"
-    There is a fundamental communication gap between **when campus resources are preempted** and **when students and faculty are notified**. Manual venue reallocation is slow, unstructured, and often fails to identify suitable alternative rooms.
+**The Conflict Resolution Problem:**
+There is a fundamental communication gap between **when campus resources are preempted** and **when students and faculty are notified**. Manual venue reallocation is slow, unstructured, and often fails to identify suitable alternative rooms.
 
 **Campus Resource Management** solves this through an automated venue booking platform:
+
 1. **Venue Booking Portal:** Timetable coordinators submit booking requests specifying required capacity, facilities, and time slot.
 2. **Automated Conflict Detection:** Dynamically validates requests against existing bookings to generate instant conflict alerts.
 3. **Rule-Based Venue Recommender:** Cross-examines available rooms to rank suitable alternative venues, ensuring graceful conflict resolution and immediate notifications to all affected users.
