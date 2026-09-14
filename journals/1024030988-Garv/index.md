@@ -27,3 +27,8 @@ Week 5 (Aug 31 - Sep 6): Collision Algorithm & Deployment Alignment
 * Developed the core Collision Detection algorithm using complex MongoDB operators (`$and`, `$or`, `$lt`, `$gt`) to prevent double-booking.
 * Finalized the admin approval routes (`/api/approve/:id`) and formatted robust JSON conflict responses (404s, 409s) for the frontend.
 * Diagnosed and fixed repository conflicts.
+
+Week 6 (Sep 7 - Sep 14): Documentation Deployment & Student Portal
+* Finalized the project documentation homepage and fully configured MkDocs for automated deployment to GitHub Pages.
+* Developed the backend integration for the Student Portal, allowing students to seamlessly retrieve and view their dynamic timetables.
+* Refactored the core GitHub repository to cleanly organize architectural deliverables, prototype reports, and team journals.

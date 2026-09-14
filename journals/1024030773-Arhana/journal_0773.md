@@ -27,3 +27,8 @@ Week 5 (Aug 31 - Sep 6): Conflict Resolution UI & Final Refinements
 * Completed the Conflict Resolution page to conditionally render success states, capacity errors, and occupied-venue warnings based on API payloads.
 * Refined the global navigation bar and finalized application styling for a professional, cohesive look.
 * Conducted local frontend testing and prototype evaluation to ensure seamless routing and accurate data rendering before final commit.
+
+Week 6 (Sep 7 - Sep 14): Architectural Design & Prototype Documentation
+* Designed comprehensive UML architecture diagrams, including the Entity-Relationship Diagram (ERD), Data Flow Diagram (DFD), and Use Case specifications.
+* Drafted the formal Prototype Evaluation Report detailing the MVP system workflows and interactive logic.
+* Created the Evaluation Presentation Deck, summarizing the technical stack, conflict resolution algorithms, and software engineering methodologies for the MST prototype review.
