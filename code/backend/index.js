@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import connectDB from './db.js'; 
-import availabilityRoutes from './routes/availabilityRoutes.js'; // <-- Import this
+import availabilityRoutes from './routes/availabilityRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/availability', availabilityRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

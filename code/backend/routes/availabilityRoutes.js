@@ -37,7 +37,45 @@ router.post('/check', async (req, res) => {
         });
 
         if (conflict) {
-            return res.json({ available: false, conflictActivity: conflict });
+            // Recommender Engine: Coordinate Based (Option A)
+            const candidateRooms = await Room.find({ capacity: { $gte: requestedCapacity } });
+            const recommendations = [];
+
+            for (let room of candidateRooms) {
+                if (room._id.equals(targetRoom._id)) continue;
+                
+                // Check if candidate room is free during this time
+                const roomConflict = await Activity.findOne({
+                    requestedRoom: room._id,
+                    dayOfWeek: dayOfWeek,
+                    status: 'Approved',
+                    $and: [
+                        { startTime: { $lt: endTime } },
+                        { endTime: { $gt: startTime } }
+                    ]
+                });
+
+                if (!roomConflict && room.coordinates && targetRoom.coordinates) {
+                    const dx = room.coordinates.x - targetRoom.coordinates.x;
+                    const dy = room.coordinates.y - targetRoom.coordinates.y;
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    recommendations.push({ 
+                        roomNumber: room.roomNumber, 
+                        capacity: room.capacity, 
+                        distance: Math.round(distance) 
+                    });
+                }
+            }
+
+            // Sort by shortest distance
+            recommendations.sort((a, b) => a.distance - b.distance);
+            const topRecommendations = recommendations.slice(0, 3);
+
+            return res.json({ 
+                available: false, 
+                conflictActivity: conflict,
+                recommendations: topRecommendations 
+            });
         }
 
         return res.json({ available: true, room: targetRoom });

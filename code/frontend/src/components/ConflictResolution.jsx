@@ -56,20 +56,53 @@ function ConflictResolution() {
 
       {}
       {!result.available && !result.capacityError && (
-        <section className="conflictBanner">
-          <div className="conflictIcon">!</div>
-          <div className="conflictInformation">
-            <div className="conflictTitle">
-              <span>VENUE CONFLICT DETECTED</span>
-              <span className="conflictBadge">UNAVAILABLE</span>
+        <>
+          <section className="conflictBanner">
+            <div className="conflictIcon">!</div>
+            <div className="conflictInformation">
+              <div className="conflictTitle">
+                <span>VENUE CONFLICT DETECTED</span>
+                <span className="conflictBadge">UNAVAILABLE</span>
+              </div>
+              <h2>{request.roomNumber} is occupied by: {result.conflictActivity?.title}</h2>
+              <div className="requestDetails">
+                <span>{request.activityType.toUpperCase()}</span>
+                <span>{request.startTime} — {request.endTime}</span>
+              </div>
             </div>
-            <h2>{request.roomNumber} is occupied by: {result.conflictActivity?.title}</h2>
-            <div className="requestDetails">
-              <span>{request.activityType.toUpperCase()}</span>
-              <span>{request.startTime} — {request.endTime}</span>
-            </div>
-          </div>
-        </section>
+          </section>
+
+          {result.recommendations && result.recommendations.length > 0 && (
+            <section style={{ marginTop: '30px' }}>
+              <div className="sectionHeading">
+                <h2>Alternative Recommendations</h2>
+                <span className="resultCount">{result.recommendations.length} AVAILABLE</span>
+              </div>
+              <p style={{ color: '#71859b', fontSize: '13px', marginBottom: '20px' }}>
+                These venues are physically closest to your original request ({request.roomNumber}) and have enough capacity.
+              </p>
+              <div className="roomGrid">
+                {result.recommendations.map((rec, index) => (
+                  <div key={index} className="roomCard" style={{ minHeight: 'auto', padding: '20px' }}>
+                    <div className="roomTop" style={{ marginBottom: '15px' }}>
+                      <span className="matchBadge" style={{ background: index === 0 ? '#dff5e5' : '#dce7ff', color: index === 0 ? '#14702d' : '#1800ad' }}>
+                        {index === 0 ? 'BEST MATCH' : `OPTION ${index + 1}`}
+                      </span>
+                      <span className="matchScore" style={{ fontSize: '14px' }}>{rec.distance}m away</span>
+                    </div>
+                    <div className="roomTitle" style={{ marginBottom: '20px' }}>
+                      <h3 style={{ fontSize: '24px' }}>{rec.roomNumber}</h3>
+                      <span>Capacity: {rec.capacity}</span>
+                    </div>
+                    <button className="selectButton" onClick={() => alert(`Booked ${rec.roomNumber} successfully!`)}>
+                      BOOK VENUE <span>→</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       )}
 
       {}

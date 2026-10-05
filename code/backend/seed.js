@@ -20,20 +20,20 @@ const seedDatabase = async () => {
        
         const roomsToInsert = [
             // Lecture Halls (Capacity 150)
-            { roomNumber: 'LT302', capacity: 150, type: 'Lecture Hall' },
-            { roomNumber: 'LT303', capacity: 150, type: 'Lecture Hall' },
-            { roomNumber: 'LT401', capacity: 150, type: 'Lecture Hall' },
-            { roomNumber: 'LT402', capacity: 150, type: 'Lecture Hall' },
-            { roomNumber: 'LT403', capacity: 150, type: 'Lecture Hall' },
-            { roomNumber: 'LT101', capacity: 250, type: 'Lecture Hall' },
-            { roomNumber: 'LP104', capacity: 150, type: 'Lecture Hall' }, 
+            { roomNumber: 'LT302', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 150} },
+            { roomNumber: 'LT303', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 160} },
+            { roomNumber: 'LT401', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 170} },
+            { roomNumber: 'LT402', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 180} },
+            { roomNumber: 'LT403', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 190} },
+            { roomNumber: 'LT101', capacity: 250, type: 'Lecture Hall', coordinates: {x: 100, y: 200} },
+            { roomNumber: 'LP104', capacity: 150, type: 'Lecture Hall', coordinates: {x: 300, y: 150} }, 
             
             // Labs / Practicals (Capacity 35)
-            { roomNumber: 'IS2(L409)', capacity: 35, type: 'Lab' },
-            { roomNumber: 'SE2(L105)', capacity: 35, type: 'Lab' },
-            { roomNumber: 'AI(L307)', capacity: 35, type: 'Lab' },
-            { roomNumber: 'NS1(L102)', capacity: 35, type: 'Lab' },
-            { roomNumber: 'LP108', capacity: 100, type: 'Lab' }
+            { roomNumber: 'IS2(L409)', capacity: 35, type: 'Lab', coordinates: {x: 500, y: 100} },
+            { roomNumber: 'SE2(L105)', capacity: 35, type: 'Lab', coordinates: {x: 550, y: 120} },
+            { roomNumber: 'AI(L307)', capacity: 35, type: 'Lab', coordinates: {x: 600, y: 140} },
+            { roomNumber: 'NS1(L102)', capacity: 35, type: 'Lab', coordinates: {x: 700, y: 160} },
+            { roomNumber: 'LP108', capacity: 100, type: 'Lab', coordinates: {x: 300, y: 180} }
         ];
 
         const insertedRooms = await Room.insertMany(roomsToInsert);
@@ -43,12 +43,31 @@ const seedDatabase = async () => {
             roomMap[room.roomNumber] = room._id;
         });
 
-        console.log("Injecting Faculty...");
+        console.log("Injecting Dummy Users for Auth Testing...");
+        
+        const bcrypt = await import('bcryptjs');
+        const hashedPassword = await bcrypt.default.hash('password123', 10);
+
+        const dummyStudent = await User.create({
+            name: 'Test Student',
+            email: 'dummy_student@test.edu',
+            password: hashedPassword,
+            role: 'Student',
+            batch: '3C54'
+        });
 
         const mockFaculty = await User.create({ 
-            name: 'Prof', 
-            email: 'prof@thapar.edu', 
+            name: 'Test Faculty', 
+            email: 'dummy_faculty@test.edu', 
+            password: hashedPassword,
             role: 'Faculty' 
+        });
+
+        const dummyAdmin = await User.create({
+            name: 'Test Admin',
+            email: 'admin@test.edu',
+            password: hashedPassword,
+            role: 'Admin'
         });
 
         console.log("Injecting 3C54 Weekly Timetable...");
