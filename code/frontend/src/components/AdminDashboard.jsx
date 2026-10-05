@@ -1,32 +1,35 @@
+import React from 'react';
 import { useState } from 'react';
 
 function AdminDashboard() {
   const [formData, setFormData] = useState({
     title: 'DBMS Lab',
-    roomId: '',
+    roomId: '', 
     facultyId: '',
     dayOfWeek: 'Monday',
-    startTime: '14:00',
-    endTime: '16:00',
+    startTime: '14:00', 
+    endTime: '16:00',  
     batches: '2C54' 
-  });
+  });  
 
   const mockRooms = [
     { id: '1', name: 'G-101 (Lecture Hall)' },
     { id: '2', name: 'Computer Lab 3' }
-  ];
+  ]; 
   
   const mockFaculty = [
     { id: '101', name: 'Dr. Sharma' },
     { id: '102', name: 'Prof. Gupta' }
-  ];
+  ]; 
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+  const handleChange = (e) => { 
+    const { name, value } = e.target; 
+    setFormData(function(prevState) {
+    return {
+        ...prevState,
+        [name]: value
+    };
+}); 
   };
 
   const handleSubmit = (e) => {
@@ -43,7 +46,15 @@ function AdminDashboard() {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="adminPage">
+    <div className="sideBar">
+       <a href="/adminHomePage">Home</a>
+        <a href="/">Venue Booking</a>
+         <a href="#">Exam Scheduling</a>
+          <a href="#">Calendar</a>
+           <a href="#">Settings</a>
+    </div>
+    <div className="adminContent">
       <h2>Admin Scheduling Dashboard</h2>
       
       <form onSubmit={handleSubmit}>
@@ -99,6 +110,7 @@ function AdminDashboard() {
 
         <button type="submit" style={styles.button}>Check Collisions & Schedule</button>
       </form>
+    </div>
     </div>
   );
 }
