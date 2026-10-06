@@ -33,8 +33,14 @@
 * Finalized the admin approval routes (`/api/approve/:id`) and formatted robust JSON conflict responses (404s, 409s) for the frontend.
 * Diagnosed and fixed repository conflicts.
 
-### Week 6 (Sep 7 - Sep 14): Documentation Deployment & Student Portal
+### Week 6 (Sep 7 - Sep 13): Documentation Deployment & Student Portal
 
 * Finalized the project documentation homepage and fully configured MkDocs for automated deployment to GitHub Pages.
 * Developed the backend integration for the Student Portal, allowing students to seamlessly retrieve and view their dynamic timetables.
 * Refactored the core GitHub repository to cleanly organize architectural deliverables, prototype reports, and team journals.
+
+### Week 9 (Sep 29 - Oct 5): Backend Integration & Security Planning
+
+* Planned and implemented the role-based authentication and authorization system using JWT and bcrypt.
+* Linked the backend APIs to the newly redesigned Admin Portal and Login page for real-time data fetching and approval workflows.
+* Designed the coordinate-based distance algorithm to generate physical venue recommendations for scheduling conflicts.
