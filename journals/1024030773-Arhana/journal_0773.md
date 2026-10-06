@@ -33,8 +33,14 @@
 * Refined the global navigation bar and finalized application styling for a professional, cohesive look.
 * Conducted local frontend testing and prototype evaluation to ensure seamless routing and accurate data rendering before final commit.
 
-### Week 6 (Sep 7 - Sep 14): Architectural Design & Prototype Documentation
+### Week 6 (Sep 7 - Sep 13): Architectural Design & Prototype Documentation
 
 * Designed comprehensive UML architecture diagrams, including the Entity-Relationship Diagram (ERD), Data Flow Diagram (DFD), and Use Case specifications.
 * Drafted the formal Prototype Evaluation Report detailing the MVP system workflows and interactive logic.
 * Created the Evaluation Presentation Deck, summarizing the technical stack, conflict resolution algorithms, and software engineering methodologies for the MST prototype review.
+
+### Week 9 (Sep 29 - Oct 5): Interface Redesign & Authentication UI
+
+* Redesigned the Admin Portal with a new cohesive layout, dynamic sidebar navigation, and integrated statistics widgets.
+* Designed and implemented the frontend Login page for the new authentication system.
+* Consolidated the application appearance to match the new UI/UX requirements.
