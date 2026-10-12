@@ -44,3 +44,9 @@
 * Redesigned the Admin Portal with a new cohesive layout, dynamic sidebar navigation, and integrated statistics widgets.
 * Designed and implemented the frontend Login page for the new authentication system.
 * Consolidated the application appearance to match the new UI/UX requirements.
+  
+### Week 10 (Oct 6 - Oct 12): Dynamic Schedule Controls & Interactive Overlays
+
+* Implemented a rolling 60-day horizontal calendar picker with auto-centering click navigation for the Admin Schedule viewer.
+* Designed detailed event inspection modals displaying venue details, attending student rosters, and real-time available alternate rooms.
+* Added interactive modal overlays to the Admin Dashboard metric widgets to inspect current-day class schedules and venue capacity distributions.
