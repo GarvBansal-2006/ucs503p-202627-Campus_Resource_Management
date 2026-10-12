@@ -44,3 +44,9 @@
 * Planned and implemented the role-based authentication and authorization system using JWT and bcrypt.
 * Linked the backend APIs to the newly redesigned Admin Portal and Login page for real-time data fetching and approval workflows.
 * Designed the coordinate-based distance algorithm to generate physical venue recommendations for scheduling conflicts.
+
+### Week 10 (Oct 6 - Oct 12): Spatial Routing & Administrative Overrides
+
+* Engineered 3D spatial coordinate calculations for campus buildings, incorporating inter-floor elevation offsets into the venue proximity recommendation engine.
+* Developed administrative override and resolution endpoints (`/activity/:id/modify` and `/resolve-conflict`) to support dynamic shifting or cancellation of booked venues with automated notification dispatches.
+* Built automated database aggregation routines to merge continuous time blocks and cluster multi-batch lecture allocations across campus rooms.
