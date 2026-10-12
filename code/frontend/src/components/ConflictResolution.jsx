@@ -1,14 +1,56 @@
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function ConflictResolution() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [modalConfig, setModalConfig] = useState(null);
   
   if (!location.state) {
     return <div style={{ padding: '50px' }}>No request data found. Please go back.</div>;
   }
 
   const { request, result } = location.state;
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  const submitRequest = async (roomNumber) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/availability/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...request,
+          roomNumber,
+          facultyId: user.id || user._id,
+          title: request.activityType,
+          batches: 'N/A'
+        })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setModalConfig({
+          type: 'success',
+          title: 'Request Submitted!',
+          message: data.message,
+          onClose: () => navigate('/')
+        });
+      } else {
+        setModalConfig({
+          type: 'error',
+          title: 'Submission Failed',
+          message: data.error,
+          onClose: () => setModalConfig(null)
+        });
+      }
+    } catch (err) {
+      setModalConfig({
+        type: 'error',
+        title: 'Error',
+        message: 'Failed to submit request to the server.',
+        onClose: () => setModalConfig(null)
+      });
+    }
+  };
 
   let eyebrowText = "SUCCESS";
   let pageTitle = "Venue Available!";
@@ -94,7 +136,7 @@ function ConflictResolution() {
                       <h3 style={{ fontSize: '24px' }}>{rec.roomNumber}</h3>
                       <span>Capacity: {rec.capacity}</span>
                     </div>
-                    <button className="selectButton" onClick={() => alert(`Booked ${rec.roomNumber} successfully!`)}>
+                    <button className="selectButton" onClick={() => submitRequest(rec.roomNumber)}>
                       BOOK VENUE <span>→</span>
                     </button>
                   </div>
@@ -114,6 +156,9 @@ function ConflictResolution() {
               <span>VENUE VACANT</span>
             </div>
             <h2 style={{ color: '#234e52' }}>{request.roomNumber} is available to book!</h2>
+            <button className="primaryButton" style={{ marginTop: '15px' }} onClick={() => submitRequest(request.roomNumber)}>
+              SUBMIT REQUEST FOR APPROVAL <span>→</span>
+            </button>
           </div>
         </section>
       )}
@@ -143,6 +188,26 @@ function ConflictResolution() {
           ← BACK TO REQUEST FORM
         </button>
       </div>
+
+      {}
+      {modalConfig && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999 }}>
+          <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '12px', width: '400px', maxWidth: '90%', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', textAlign: 'center' }}>
+            <h2 style={{ margin: '0 0 15px 0', color: modalConfig.type === 'success' ? '#28a745' : '#dc3545' }}>
+              {modalConfig.title}
+            </h2>
+            <p style={{ color: '#5e7590', marginBottom: '25px', whiteSpace: 'pre-line', lineHeight: '1.5' }}>
+              {modalConfig.message}
+            </p>
+            <button 
+              onClick={modalConfig.onClose}
+              style={{ padding: '10px 25px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              Acknowledge
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

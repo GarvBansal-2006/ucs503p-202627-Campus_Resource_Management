@@ -2,18 +2,17 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Notification from '../models/Notification.js';
 
 const router = express.Router();
 
-// Helper to detect role from email
 const detectRole = (email) => {
-    if (email.endsWith('_student@test.edu')) return 'Student';
-    if (email.endsWith('_faculty@test.edu')) return 'Faculty';
-    if (email.endsWith('_admin@test.edu') || email === 'admin@test.edu') return 'Admin';
-    return null; // Invalid domain/pattern
+    if (email.includes('student')) return 'Student';
+    if (email.includes('faculty')) return 'Faculty';
+    if (email.includes('admin') || email === 'admin@test.edu') return 'Admin';
+    return null;
 };
 
-// Register
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password, batch } = req.body;
@@ -43,7 +42,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -57,6 +55,24 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '1d' });
 
         res.json({ token, user: { id: user._id, name: user.name, role: user.role, email: user.email } });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/notifications/:userId', async (req, res) => {
+    try {
+        const notifs = await Notification.find({ user: req.params.userId }).sort({ date: -1 });
+        res.json(notifs);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/notifications/:id/read', async (req, res) => {
+    try {
+        await Notification.findByIdAndUpdate(req.params.id, { read: true });
+        res.json({ success: true });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }

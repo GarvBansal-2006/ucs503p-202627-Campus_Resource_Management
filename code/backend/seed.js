@@ -1,133 +1,278 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import Room from './models/Room.js';
 import User from './models/User.js';
+import Room from './models/Room.js';
 import Activity from './models/Activity.js';
+import fs from 'fs';
 
 dotenv.config();
 
-const seedDatabase = async () => {
+const scheduleData = [
+    { dayOfWeek: "Monday", startTime: "08:00", endTime: "08:50", batch: "3c51", subject: "UML501P", room: "L313" },
+    { dayOfWeek: "Monday", startTime: "08:50", endTime: "09:40", batch: "3c51", subject: "UML501P", room: "L313" },
+    { dayOfWeek: "Monday", startTime: "09:40", endTime: "10:30", batch: "3c51", subject: "UCS553L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "10:30", endTime: "11:20", batch: "3c51", subject: "UCS421L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "13:50", endTime: "14:40", batch: "3c51", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Monday", startTime: "14:40", endTime: "15:30", batch: "3c51", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Tuesday", startTime: "09:40", endTime: "10:30", batch: "3c51", subject: "UCS615L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "10:30", endTime: "11:20", batch: "3c51", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "11:20", endTime: "12:10", batch: "3c51", subject: "UML501L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "12:10", endTime: "13:00", batch: "3c51", subject: "UCS553L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "13:50", endTime: "14:40", batch: "3c51", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Tuesday", startTime: "14:40", endTime: "15:30", batch: "3c51", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Tuesday", startTime: "15:30", endTime: "16:20", batch: "3c51", subject: "UCS421L", room: "LT401" },
+    { dayOfWeek: "Tuesday", startTime: "16:20", endTime: "17:10", batch: "3c51", subject: "UCS503L", room: "LT401" },
+    { dayOfWeek: "Wednesday", startTime: "09:40", endTime: "10:30", batch: "3c51", subject: "UCS553P", room: "L402" },
+    { dayOfWeek: "Wednesday", startTime: "10:30", endTime: "11:20", batch: "3c51", subject: "UCS553P", room: "L402" },
+    { dayOfWeek: "Wednesday", startTime: "13:00", endTime: "13:50", batch: "3c51", subject: "UML501L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "13:50", endTime: "14:40", batch: "3c51", subject: "UCS503L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "14:40", endTime: "15:30", batch: "3c51", subject: "UCS510L", room: "LT403" },
+    { dayOfWeek: "Thursday", startTime: "10:30", endTime: "11:20", batch: "3c51", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Thursday", startTime: "11:20", endTime: "12:10", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "12:10", endTime: "13:00", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "13:50", endTime: "14:40", batch: "3c51", subject: "UCS503L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "14:40", endTime: "15:30", batch: "3c51", subject: "UCS615L", room: "LP104" },
+    { dayOfWeek: "Friday", startTime: "11:20", endTime: "12:10", batch: "3c51", subject: "UCS421L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "12:10", endTime: "13:00", batch: "3c51", subject: "UML501L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "13:50", endTime: "14:40", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "14:40", endTime: "15:30", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "15:30", endTime: "16:20", batch: "3c51", subject: "UCS615L", room: "LT401" },
+    { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c51", subject: "UCS553L", room: "LT401" },
+    
+        
+
+    { dayOfWeek: "Monday", startTime: "08:00", endTime: "08:50", batch: "3c52", subject: "UML501P", room: "L301" },
+    { dayOfWeek: "Monday", startTime: "08:50", endTime: "09:40", batch: "3c52", subject: "UML501P", room: "L301" },
+    { dayOfWeek: "Monday", startTime: "09:40", endTime: "10:30", batch: "3c52", subject: "UCS553L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "10:30", endTime: "11:20", batch: "3c52", subject: "UCS421L", room: "LT303" },
+    { dayOfWeek: "Tuesday", startTime: "09:40", endTime: "10:30", batch: "3c52", subject: "UCS615L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "10:30", endTime: "11:20", batch: "3c52", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "11:20", endTime: "12:10", batch: "3c52", subject: "UML501L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "12:10", endTime: "13:00", batch: "3c52", subject: "UCS553L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "13:50", endTime: "14:40", batch: "3c52", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Tuesday", startTime: "14:40", endTime: "15:30", batch: "3c52", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Tuesday", startTime: "15:30", endTime: "16:20", batch: "3c52", subject: "UCS421L", room: "LT401" },
+    { dayOfWeek: "Tuesday", startTime: "16:20", endTime: "17:10", batch: "3c52", subject: "UCS503L", room: "LT401" },
+    { dayOfWeek: "Wednesday", startTime: "09:40", endTime: "10:30", batch: "3c52", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Wednesday", startTime: "10:30", endTime: "11:20", batch: "3c52", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Wednesday", startTime: "13:00", endTime: "13:50", batch: "3c52", subject: "UML501L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "13:50", endTime: "14:40", batch: "3c52", subject: "UCS503L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "14:40", endTime: "15:30", batch: "3c52", subject: "UCS510L", room: "LT403" },
+    { dayOfWeek: "Thursday", startTime: "10:30", endTime: "11:20", batch: "3c52", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Thursday", startTime: "11:20", endTime: "12:10", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "12:10", endTime: "13:00", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "13:50", endTime: "14:40", batch: "3c52", subject: "UCS503L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "14:40", endTime: "15:30", batch: "3c52", subject: "UCS615L", room: "LP104" },
+    { dayOfWeek: "Friday", startTime: "08:00", endTime: "08:50", batch: "3c52", subject: "UCS553P", room: "L402" },
+    { dayOfWeek: "Friday", startTime: "08:50", endTime: "09:40", batch: "3c52", subject: "UCS553P", room: "L402" },
+    { dayOfWeek: "Friday", startTime: "11:20", endTime: "12:10", batch: "3c52", subject: "UCS421L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "12:10", endTime: "13:00", batch: "3c52", subject: "UML501L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "13:50", endTime: "14:40", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "14:40", endTime: "15:30", batch: "3c52", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "15:30", endTime: "16:20", batch: "3c52", subject: "UCS615L", room: "LT401" },
+    { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c52", subject: "UCS553L", room: "LT401" },
+    
+    
+    
+    { dayOfWeek: "Monday", startTime: "08:00", endTime: "08:50", batch: "3c53", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Monday", startTime: "08:50", endTime: "09:40", batch: "3c53", subject: "UCS615P", room: "L408" },
+    { dayOfWeek: "Monday", startTime: "09:40", endTime: "10:30", batch: "3c53", subject: "UCS553L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "10:30", endTime: "11:20", batch: "3c53", subject: "UCS421L", room: "LT303" },
+    { dayOfWeek: "Tuesday", startTime: "09:40", endTime: "10:30", batch: "3c53", subject: "UCS615L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "10:30", endTime: "11:20", batch: "3c53", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "11:20", endTime: "12:10", batch: "3c53", subject: "UML501L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "12:10", endTime: "13:00", batch: "3c53", subject: "UCS553L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "15:30", endTime: "16:20", batch: "3c53", subject: "UCS421L", room: "LT401" },
+    { dayOfWeek: "Tuesday", startTime: "16:20", endTime: "17:10", batch: "3c53", subject: "UCS503L", room: "LT401" },
+    { dayOfWeek: "Wednesday", startTime: "09:40", endTime: "10:30", batch: "3c53", subject: "UML501P", room: "L308" },
+    { dayOfWeek: "Wednesday", startTime: "10:30", endTime: "11:20", batch: "3c53", subject: "UML501P", room: "L308" },
+    { dayOfWeek: "Wednesday", startTime: "13:00", endTime: "13:50", batch: "3c53", subject: "UML501L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "13:50", endTime: "14:40", batch: "3c53", subject: "UCS503L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "14:40", endTime: "15:30", batch: "3c53", subject: "UCS510L", room: "LT403" },
+    { dayOfWeek: "Thursday", startTime: "10:30", endTime: "11:20", batch: "3c53", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Thursday", startTime: "11:20", endTime: "12:10", batch: "3c53", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "12:10", endTime: "13:00", batch: "3c53", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "13:50", endTime: "14:40", batch: "3c53", subject: "UCS503L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "14:40", endTime: "15:30", batch: "3c53", subject: "UCS615L", room: "LP104" },
+    { dayOfWeek: "Friday", startTime: "08:00", endTime: "08:50", batch: "3c53", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Friday", startTime: "08:50", endTime: "09:40", batch: "3c53", subject: "UCS503P", room: "L501" },
+    { dayOfWeek: "Friday", startTime: "09:40", endTime: "10:30", batch: "3c53", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Friday", startTime: "10:30", endTime: "11:20", batch: "3c53", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Friday", startTime: "11:20", endTime: "12:10", batch: "3c53", subject: "UCS421L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "12:10", endTime: "13:00", batch: "3c53", subject: "UML501L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "13:50", endTime: "14:40", batch: "3c53", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "14:40", endTime: "15:30", batch: "3c53", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "15:30", endTime: "16:20", batch: "3c53", subject: "UCS615L", room: "LT401" },
+    { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c53", subject: "UCS553L", room: "LT401" },
+    
+    
+    
+    { dayOfWeek: "Monday", startTime: "08:00", endTime: "08:50", batch: "3c54", subject: "UCS615P", room: "L409" },
+    { dayOfWeek: "Monday", startTime: "08:50", endTime: "09:40", batch: "3c54", subject: "UCS615P", room: "L409" },
+    { dayOfWeek: "Monday", startTime: "09:40", endTime: "10:30", batch: "3c54", subject: "UCS553L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "10:30", endTime: "11:20", batch: "3c54", subject: "UCS421L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "11:20", endTime: "12:10", batch: "3c54", subject: "ELECTIVE", room: "TBD" },
+    { dayOfWeek: "Monday", startTime: "12:10", endTime: "13:00", batch: "3c54", subject: "ELECTIVE", room: "TBD" },
+    { dayOfWeek: "Monday", startTime: "15:30", endTime: "16:20", batch: "3c54", subject: "ELECTIVE", room: "TBD" },
+    { dayOfWeek: "Monday", startTime: "16:20", endTime: "17:10", batch: "3c54", subject: "ELECTIVE", room: "TBD" },
+    { dayOfWeek: "Tuesday", startTime: "08:00", endTime: "08:50", batch: "3c54", subject: "UCS503P", room: "L105" },
+    { dayOfWeek: "Tuesday", startTime: "08:50", endTime: "09:40", batch: "3c54", subject: "UCS503P", room: "L105" },
+    { dayOfWeek: "Tuesday", startTime: "09:40", endTime: "10:30", batch: "3c54", subject: "UCS615L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "10:30", endTime: "11:20", batch: "3c54", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "11:20", endTime: "12:10", batch: "3c54", subject: "UML501L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "12:10", endTime: "13:00", batch: "3c54", subject: "UCS553L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "15:30", endTime: "16:20", batch: "3c54", subject: "UCS421L", room: "LT401" },
+    { dayOfWeek: "Tuesday", startTime: "16:20", endTime: "17:10", batch: "3c54", subject: "UCS503L", room: "LT401" },
+    { dayOfWeek: "Wednesday", startTime: "13:00", endTime: "13:50", batch: "3c54", subject: "UML501L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "13:50", endTime: "14:40", batch: "3c54", subject: "UCS503L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "14:40", endTime: "15:30", batch: "3c54", subject: "UCS510L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "15:30", endTime: "16:20", batch: "3c54", subject: "UML501P", room: "L307" },
+    { dayOfWeek: "Wednesday", startTime: "16:20", endTime: "17:10", batch: "3c54", subject: "UML501P", room: "L307" },
+    { dayOfWeek: "Thursday", startTime: "10:30", endTime: "11:20", batch: "3c54", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Thursday", startTime: "11:20", endTime: "12:10", batch: "3c54", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "12:10", endTime: "13:00", batch: "3c54", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "13:50", endTime: "14:40", batch: "3c54", subject: "UCS503L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "14:40", endTime: "15:30", batch: "3c54", subject: "UCS615L", room: "LP104" },
+    { dayOfWeek: "Friday", startTime: "08:00", endTime: "08:50", batch: "3c54", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Friday", startTime: "08:50", endTime: "09:40", batch: "3c54", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Friday", startTime: "11:20", endTime: "12:10", batch: "3c54", subject: "UCS421L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "12:10", endTime: "13:00", batch: "3c54", subject: "UML501L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "13:50", endTime: "14:40", batch: "3c54", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "14:40", endTime: "15:30", batch: "3c54", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "15:30", endTime: "16:20", batch: "3c54", subject: "UCS615L", room: "LT401" },
+    { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c54", subject: "UCS553L", room: "LT401" },
+    
+    
+    
+    { dayOfWeek: "Monday", startTime: "08:00", endTime: "08:50", batch: "3c55", subject: "UML501P", room: "L308" },
+    { dayOfWeek: "Monday", startTime: "08:50", endTime: "09:40", batch: "3c55", subject: "UML501P", room: "L308" },
+    { dayOfWeek: "Monday", startTime: "09:40", endTime: "10:30", batch: "3c55", subject: "UCS553L", room: "LT303" },
+    { dayOfWeek: "Monday", startTime: "10:30", endTime: "11:20", batch: "3c55", subject: "UCS421L", room: "LT303" },
+    { dayOfWeek: "Tuesday", startTime: "08:00", endTime: "08:50", batch: "3c55", subject: "UCS503P", room: "L104" },
+    { dayOfWeek: "Tuesday", startTime: "08:50", endTime: "09:40", batch: "3c55", subject: "UCS503P", room: "L104" },
+    { dayOfWeek: "Tuesday", startTime: "09:40", endTime: "10:30", batch: "3c55", subject: "UCS615L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "10:30", endTime: "11:20", batch: "3c55", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "11:20", endTime: "12:10", batch: "3c55", subject: "UML501L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "12:10", endTime: "13:00", batch: "3c55", subject: "UCS553L", room: "LT302" },
+    { dayOfWeek: "Tuesday", startTime: "15:30", endTime: "16:20", batch: "3c55", subject: "UCS421L", room: "LT401" },
+    { dayOfWeek: "Tuesday", startTime: "16:20", endTime: "17:10", batch: "3c55", subject: "UCS503L", room: "LT401" },
+    { dayOfWeek: "Wednesday", startTime: "09:40", endTime: "10:30", batch: "3c55", subject: "UCS615P", room: "L409" },
+    { dayOfWeek: "Wednesday", startTime: "10:30", endTime: "11:20", batch: "3c55", subject: "UCS615P", room: "L409" },
+    { dayOfWeek: "Wednesday", startTime: "13:00", endTime: "13:50", batch: "3c55", subject: "UML501L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "13:50", endTime: "14:40", batch: "3c55", subject: "UCS503L", room: "LT403" },
+    { dayOfWeek: "Wednesday", startTime: "14:40", endTime: "15:30", batch: "3c55", subject: "UCS510L", room: "LT403" },
+    { dayOfWeek: "Thursday", startTime: "10:30", endTime: "11:20", batch: "3c55", subject: "UCS510L", room: "LT302" },
+    { dayOfWeek: "Thursday", startTime: "11:20", endTime: "12:10", batch: "3c55", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "12:10", endTime: "13:00", batch: "3c55", subject: "CONVERSATIONAL_AI", room: "LT101" },
+    { dayOfWeek: "Thursday", startTime: "13:50", endTime: "14:40", batch: "3c55", subject: "UCS503L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "14:40", endTime: "15:30", batch: "3c55", subject: "UCS615L", room: "LP104" },
+    { dayOfWeek: "Thursday", startTime: "15:30", endTime: "16:20", batch: "3c55", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Thursday", startTime: "16:20", endTime: "17:10", batch: "3c55", subject: "UCS553P", room: "L102" },
+    { dayOfWeek: "Friday", startTime: "11:20", endTime: "12:10", batch: "3c55", subject: "UCS421L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "12:10", endTime: "13:00", batch: "3c55", subject: "UML501L", room: "LT402" },
+    { dayOfWeek: "Friday", startTime: "13:50", endTime: "14:40", batch: "3c55", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "14:40", endTime: "15:30", batch: "3c55", subject: "CONVERSATIONAL_AI", room: "LP108" },
+    { dayOfWeek: "Friday", startTime: "15:30", endTime: "16:20", batch: "3c55", subject: "UCS615L", room: "LT401" },
+    { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c55", subject: "UCS553L", room: "LT401" }
+];
+
+async function seed() {
     try {
-        console.log("Connecting to MongoDB...");
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("Connected! Clearing old data...");
+        console.log("Connected to MongoDB for seeding...");
 
-        await Room.deleteMany({});
+        // Clear existing DB
         await User.deleteMany({});
+        await Room.deleteMany({});
         await Activity.deleteMany({});
+        console.log("Cleared existing database.");
 
-        console.log("Injecting Rooms...");
-       
-        const roomsToInsert = [
-            // Lecture Halls (Capacity 150)
-            { roomNumber: 'LT302', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 150} },
-            { roomNumber: 'LT303', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 160} },
-            { roomNumber: 'LT401', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 170} },
-            { roomNumber: 'LT402', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 180} },
-            { roomNumber: 'LT403', capacity: 150, type: 'Lecture Hall', coordinates: {x: 100, y: 190} },
-            { roomNumber: 'LT101', capacity: 250, type: 'Lecture Hall', coordinates: {x: 100, y: 200} },
-            { roomNumber: 'LP104', capacity: 150, type: 'Lecture Hall', coordinates: {x: 300, y: 150} }, 
-            
-            // Labs / Practicals (Capacity 35)
-            { roomNumber: 'IS2(L409)', capacity: 35, type: 'Lab', coordinates: {x: 500, y: 100} },
-            { roomNumber: 'SE2(L105)', capacity: 35, type: 'Lab', coordinates: {x: 550, y: 120} },
-            { roomNumber: 'AI(L307)', capacity: 35, type: 'Lab', coordinates: {x: 600, y: 140} },
-            { roomNumber: 'NS1(L102)', capacity: 35, type: 'Lab', coordinates: {x: 700, y: 160} },
-            { roomNumber: 'LP108', capacity: 100, type: 'Lab', coordinates: {x: 300, y: 180} }
-        ];
+        const hashedPassword = await bcrypt.hash('password', 10);
 
-        const insertedRooms = await Room.insertMany(roomsToInsert);
-        
-        const roomMap = {};
-        insertedRooms.forEach(room => {
-            roomMap[room.roomNumber] = room._id;
-        });
-
-        console.log("Injecting Dummy Users for Auth Testing...");
-        
-        const bcrypt = await import('bcryptjs');
-        const hashedPassword = await bcrypt.default.hash('password123', 10);
-
-        const dummyStudent = await User.create({
-            name: 'Test Student',
-            email: 'dummy_student@test.edu',
+        // 1. Create Admin
+        await User.create({
+            name: "Admin User",
+            email: "admin@test.edu",
             password: hashedPassword,
-            role: 'Student',
-            batch: '3C54'
+            role: "Admin"
         });
 
-        const mockFaculty = await User.create({ 
-            name: 'Test Faculty', 
-            email: 'dummy_faculty@test.edu', 
-            password: hashedPassword,
-            role: 'Faculty' 
+        // 2. Create Students (5 batches, 5 per batch)
+        const batches = ['3c51', '3c52', '3c53', '3c54', '3c55'];
+        let studentCounter = 1;
+        for (const batch of batches) {
+            for (let i = 0; i < 5; i++) {
+                await User.create({
+                    name: `Student ${studentCounter}`,
+                    email: `student${studentCounter}@test.edu`,
+                    password: hashedPassword,
+                    role: "Student",
+                    batch: batch
+                });
+                studentCounter++;
+            }
+        }
+        console.log("Created 25 students across 5 batches.");
+
+        // 3. Extract unique subjects and create Faculty for each
+        const uniqueSubjects = [...new Set(scheduleData.map(s => s.subject))];
+        const facultyMap = {}; // subject -> faculty ObjectId
+        let facultyCounter = 1;
+        for (const subj of uniqueSubjects) {
+            const fac = await User.create({
+                name: `Faculty ${subj}`,
+                email: `faculty${facultyCounter}@test.edu`,
+                password: hashedPassword,
+                role: "Faculty"
+            });
+            facultyMap[subj] = fac._id;
+            facultyCounter++;
+        }
+        console.log(`Created ${uniqueSubjects.length} faculty members based on subjects.`);
+
+        // 4. Extract unique rooms and create them
+        const uniqueRooms = [...new Set(scheduleData.map(s => s.room))];
+        const roomMap = {}; // roomName -> room ObjectId
+        for (const roomName of uniqueRooms) {
+            let capacity = 60;
+            if (roomName.startsWith('LT')) capacity = 150;
+            if (roomName.startsWith('L') && !roomName.startsWith('LT')) capacity = 40;
+
+            const rm = await Room.create({
+                roomNumber: roomName,
+                type: capacity > 100 ? 'Lecture Hall' : 'Lab',
+                capacity: capacity,
+                coordinates: {
+                    x: Math.floor(Math.random() * 100),
+                    y: Math.floor(Math.random() * 100)
+                }
+            });
+            roomMap[roomName] = rm._id;
+        }
+        console.log(`Created ${uniqueRooms.length} rooms.`);
+
+        // 5. Create Approved Activities from timetable
+        const activityPromises = scheduleData.map(entry => {
+            return Activity.create({
+                title: entry.subject,
+                requestedRoom: roomMap[entry.room],
+                faculty: facultyMap[entry.subject],
+                dayOfWeek: entry.dayOfWeek,
+                startTime: entry.startTime,
+                endTime: entry.endTime,
+                affectedBatches: [entry.batch],
+                status: 'Approved'
+            });
         });
+        await Promise.all(activityPromises);
+        console.log(`Successfully seeded ${activityPromises.length} approved scheduled activities!`);
 
-        const dummyAdmin = await User.create({
-            name: 'Test Admin',
-            email: 'admin@test.edu',
-            password: hashedPassword,
-            role: 'Admin'
-        });
-
-        console.log("Injecting 3C54 Weekly Timetable...");
-       
-        const activitiesToInsert = [
-            // MONDAY
-            { title: 'PRACTICAL: Image Processing', room: 'IS2(L409)', day: 'Monday', start: '08:00', end: '09:40' },
-            { title: 'LECTURE: Enterprise Web Application', room: 'LT303', day: 'Monday', start: '09:40', end: '10:30' },
-            { title: 'LECTURE: Ethics And Risk Mitigation In AI', room: 'LT303', day: 'Monday', start: '10:30', end: '11:20' },
-            
-            // TUESDAY
-            { title: 'PRACTICAL: Software Engineering', room: 'SE2(L105)', day: 'Tuesday', start: '08:00', end: '09:40' },
-            { title: 'LECTURE: Image Processing', room: 'LT302', day: 'Tuesday', start: '09:40', end: '10:30' },
-            { title: 'LECTURE: Computer Architecture', room: 'LT302', day: 'Tuesday', start: '10:30', end: '11:20' },
-            { title: 'LECTURE: Machine Learning', room: 'LT302', day: 'Tuesday', start: '11:20', end: '12:10' },
-            { title: 'LECTURE: Enterprise Web Application', room: 'LT302', day: 'Tuesday', start: '12:10', end: '13:00' },
-            { title: 'LECTURE: Ethics And Risk Mitigation In AI', room: 'LT401', day: 'Tuesday', start: '15:30', end: '16:20' },
-            { title: 'LECTURE: Software Engineering', room: 'LT302', day: 'Tuesday', start: '16:20', end: '17:10' },
-
-            // WEDNESDAY
-            { title: 'LECTURE: Machine Learning', room: 'LT403', day: 'Wednesday', start: '13:00', end: '13:50' },
-            { title: 'LECTURE: Software Engineering', room: 'LT403', day: 'Wednesday', start: '13:50', end: '14:40' },
-            { title: 'LECTURE: Computer Architecture', room: 'LT403', day: 'Wednesday', start: '14:40', end: '15:30' },
-            { title: 'PRACTICAL: Machine Learning', room: 'AI(L307)', day: 'Wednesday', start: '15:30', end: '17:10' },
-
-            // THURSDAY
-            { title: 'LECTURE: Computer Architecture', room: 'LT302', day: 'Thursday', start: '10:30', end: '11:20' },
-            { title: 'LECTURE: Conversational AI', room: 'LT101', day: 'Thursday', start: '11:20', end: '13:00' },
-            { title: 'LECTURE: Software Engineering', room: 'LP104', day: 'Thursday', start: '13:50', end: '14:40' },
-            { title: 'LECTURE: Image Processing', room: 'LP104', day: 'Thursday', start: '14:40', end: '15:30' },
-
-            // FRIDAY
-            { title: 'PRACTICAL: Enterprise Web Application', room: 'NS1(L102)', day: 'Friday', start: '08:00', end: '09:40' },
-            { title: 'LECTURE: Ethics And Risk Mitigation In AI', room: 'LT402', day: 'Friday', start: '11:20', end: '12:10' },
-            { title: 'LECTURE: Machine Learning', room: 'LT402', day: 'Friday', start: '12:10', end: '13:00' },
-            { title: 'PRACTICAL: Conversational AI', room: 'LP108', day: 'Friday', start: '13:50', end: '15:30' },
-            { title: 'LECTURE: Image Processing', room: 'LT401', day: 'Friday', start: '15:30', end: '16:20' },
-            { title: 'LECTURE: Enterprise Web Application', room: 'LT402', day: 'Friday', start: '16:20', end: '17:10' }
-        ];
-
-        const mappedActivities = activitiesToInsert.map(act => ({
-            title: act.title,
-            requestedRoom: roomMap[act.room], 
-            faculty: mockFaculty._id,
-            dayOfWeek: act.day,
-            startTime: act.start,
-            endTime: act.end,
-            affectedBatches: ['3C54'],
-            status: 'Approved' 
-        }));
-
-        await Activity.insertMany(mappedActivities);
-
-        console.log(`Successfully seeded ${insertedRooms.length} rooms and ${mappedActivities.length} scheduled activities! 🌱`);
-        process.exit();
-
+        process.exit(0);
     } catch (error) {
-        console.error("Error seeding database:", error);
+        console.error("Seeding Error:", error);
         process.exit(1);
     }
-};
+}
 
-seedDatabase();
+seed();

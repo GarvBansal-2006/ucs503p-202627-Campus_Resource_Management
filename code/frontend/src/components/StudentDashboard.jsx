@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import Notifications from './Notifications';
 
 function StudentDashboard() {
   const [currentDay, setCurrentDay] = useState('');
   const [todaySchedule, setTodaySchedule] = useState([]);
+  const [user, setUser] = useState(null);
 
   const weeklySchedule = {
     Monday: [
@@ -42,6 +44,9 @@ function StudentDashboard() {
   };
 
   useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) setUser(JSON.parse(storedUser));
+
     const dayOfWeek = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     setCurrentDay(dayOfWeek);
     setTodaySchedule(weeklySchedule[dayOfWeek] || []);
@@ -65,9 +70,11 @@ function StudentDashboard() {
     <div style={styles.container}>
       <div style={styles.header}>
         <h2>Thapar Institute - Student Portal</h2>
-        <p style={{ color: '#666' }}>Academic Schedule for Batch 3C54</p>
+        <p style={{ color: '#666' }}>Academic Schedule</p>
       </div>
       
+      {user && <Notifications userId={user.id} />}
+
       <div>
         <h3 style={{ marginBottom: '15px' }}>{currentDay}'s Activities</h3>
         
@@ -94,4 +101,4 @@ function StudentDashboard() {
   );
 }
 
-export default StudentDashboard; 
+export default StudentDashboard;

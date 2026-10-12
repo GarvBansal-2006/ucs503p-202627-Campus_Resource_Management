@@ -10,7 +10,7 @@ const activitySchema = new mongoose.Schema({
     affectedBatches: [{ type: String, required: true }], 
     status: { 
         type: String, 
-        enum: ['Pending', 'Approved', 'Rejected'], 
+        enum: ['Pending', 'Approved', 'Rejected', 'Cancelled'], 
         default: 'Pending' 
     },
     adminRemarks: { type: String, default: "" } 

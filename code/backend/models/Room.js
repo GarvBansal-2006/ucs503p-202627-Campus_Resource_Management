@@ -6,7 +6,8 @@ const roomSchema = new mongoose.Schema({
     type: { type: String, required: true, enum: ['Lecture Hall', 'Lab', 'Tutorial Room'] },
     coordinates: {
         x: { type: Number, required: true },
-        y: { type: Number, required: true }
+        y: { type: Number, required: true },
+        z: { type: Number, default: 1 }
     }
 });
 
