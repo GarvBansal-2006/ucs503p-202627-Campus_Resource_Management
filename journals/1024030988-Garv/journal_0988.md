@@ -50,3 +50,15 @@
 * Engineered 3D spatial coordinate calculations for campus buildings, incorporating inter-floor elevation offsets into the venue proximity recommendation engine.
 * Developed administrative override and resolution endpoints (`/activity/:id/modify` and `/resolve-conflict`) to support dynamic shifting or cancellation of booked venues with automated notification dispatches.
 * Built automated database aggregation routines to merge continuous time blocks and cluster multi-batch lecture allocations across campus rooms.
+
+### Week 11 (Oct 20 - Oct 26): Scheduling Preemption Engine & Notification Subsystem
+
+* Developed `/check-booking` and `/force-schedule` endpoints for admin overrides and conflict checks.
+* Created the `Notification` schema and batch roster APIs (`/students-by-batches`) for real-time alerts.
+* Added 3D spatial coordinates across LT, LP, and CSED blocks for proximity calculations.
+
+### Week 12 (Oct 27 - Nov 2): Academic Timetable Ingestion & Repository Hygiene
+
+* Updated `seed.js` to populate complete university timetable schedules, batch data, and campus venues.
+* Cleaned up the codebase by removing legacy files (`Makefile`, C++ code) and stripping unused comments.
+* Fixed MkDocs journal navigation links and verified automated GitHub Pages deployments.

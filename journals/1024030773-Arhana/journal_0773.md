@@ -50,3 +50,15 @@
 * Implemented a rolling 60-day horizontal calendar picker with auto-centering click navigation for the Admin Schedule viewer.
 * Designed detailed event inspection modals displaying venue details, attending student rosters, and real-time available alternate rooms.
 * Added interactive modal overlays to the Admin Dashboard metric widgets to inspect current-day class schedules and venue capacity distributions.
+
+### Week 11 (Oct 20 - Oct 26): UML Modeling & Venue Booking Integration
+
+* Created UML Class and Sequence diagrams detailing system architecture and conflict detection flows.
+* Enabled auto-redirection from alternative venue suggestions directly to the booking form with pre-filled details.
+* Organized campus venues by block (LT Block, LP Block, and CSED L-Block) in selection dropdowns.
+
+### Week 12 (Oct 27 - Nov 2): Administrative Request Portals & Style Refactoring
+
+* Built `AdminBooking` and `AdminRequests` interfaces for direct scheduling, conflict checks, and request approvals.
+* Added `FacultyHistory` and `Notifications` components with real-time status badges and alerts.
+* Consolidated application styling into `index.css` and removed redundant CSS files.
