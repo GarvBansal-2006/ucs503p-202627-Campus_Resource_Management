@@ -63,7 +63,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter basename="/ucs503p-202627-Campus_Resource_Management/">
+    <BrowserRouter basename={import.meta.env.BASE_URL || '/'}>
       {user && (
         <nav style={navStyle}>
           <div style={{ display: 'flex', gap: '20px' }}>
