@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../api';
 
 function FacultyHistory() {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ function FacultyHistory() {
 
   useEffect(() => {
     if (user.id || user._id) {
-      fetch(`http://localhost:3000/api/availability/my-requests/${user.id || user._id}`)
+      apiFetch(`/api/availability/my-requests/${user.id || user._id}`)
         .then(res => res.json())
         .then(data => setMyRequests(data))
         .catch(err => console.error(err));
@@ -62,7 +63,7 @@ function FacultyHistory() {
                   </div>
                   <div>
                     <p style={{ margin: '0 0 5px 0', fontSize: '13px', color: '#71859b', fontWeight: 'bold', textTransform: 'uppercase' }}>Date & Time</p>
-                    <p style={{ margin: 0, fontSize: '16px', color: '#14205c' }}>{req.dayOfWeek} | {req.startTime} - {req.endTime}</p>
+                    <p style={{ margin: 0, fontSize: '16px', color: '#14205c' }}>{req.date ? req.date.slice(0, 10) : req.dayOfWeek} | {req.startTime} - {req.endTime}</p>
                   </div>
                 </div>
 

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../api';
+import { formatDateInput } from '../dateUtils';
+import FeedbackModal from './FeedbackModal';
 
 function AdminRequests() {
   const [requests, setRequests] = useState([]);
@@ -8,6 +11,7 @@ function AdminRequests() {
   const [rooms, setRooms] = useState([]);
   const [modalConfig, setModalConfig] = useState(null);
   const [selectedShiftRoom, setSelectedShiftRoom] = useState('');
+  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
     fetchRequests();
@@ -17,7 +21,7 @@ function AdminRequests() {
 
   const fetchMetadata = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/admin/metadata');
+      const response = await apiFetch('/api/admin/metadata');
       const data = await response.json();
       setRooms(data.rooms || []);
     } catch (err) {
@@ -27,7 +31,7 @@ function AdminRequests() {
 
   const fetchRequests = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/admin/requests');
+      const response = await apiFetch('/api/admin/requests');
       const data = await response.json();
       setRequests(data);
     } catch (err) {
@@ -37,7 +41,7 @@ function AdminRequests() {
 
   const fetchSchedule = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/admin/schedule/today');
+      const response = await apiFetch(`/api/admin/schedule/today?date=${formatDateInput()}`);
       const data = await response.json();
       setTodaySchedule(data);
     } catch (err) {
@@ -47,7 +51,7 @@ function AdminRequests() {
 
   const handleCheck = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/requests/${id}/check`);
+      const response = await apiFetch(`/api/admin/requests/${id}/check`);
       const data = await response.json();
       if (data.safe) {
         setModalConfig({
@@ -60,6 +64,7 @@ function AdminRequests() {
           type: 'conflict',
           title: '❌ CONFLICT DETECTED',
           conflicts: data.conflicts,
+          conflictType: data.conflictType,
           requestId: id
         });
         setSelectedShiftRoom('');
@@ -71,7 +76,7 @@ function AdminRequests() {
 
   const handleAction = async (id, action) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/requests/${id}`, {
+      const response = await apiFetch(`/api/admin/requests/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: action })
@@ -79,6 +84,9 @@ function AdminRequests() {
       if (response.ok) {
         fetchRequests(); 
         fetchSchedule();
+      } else {
+        const data = await response.json();
+        setFeedback({ variant: 'error', title: 'Unable to update request', message: data.error || 'Please try again.' });
       }
     } catch (err) {
       console.error(err);
@@ -87,13 +95,13 @@ function AdminRequests() {
 
   const handleResolveConflict = async (action) => {
     if (action === 'shift' && !selectedShiftRoom) {
-      alert("Please select an alternate room first.");
+      setFeedback({ variant: 'error', title: 'Select an alternate venue', message: 'Choose the room where the existing activity should be shifted.' });
       return;
     }
 
     try {
       const conflictIds = modalConfig.conflicts.map(c => c._id);
-      const response = await fetch(`http://localhost:3000/api/admin/requests/${modalConfig.requestId}/resolve-conflict`, {
+      const response = await apiFetch(`/api/admin/requests/${modalConfig.requestId}/resolve-conflict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, conflictIds, newRoomId: selectedShiftRoom })
@@ -102,6 +110,9 @@ function AdminRequests() {
         setModalConfig(null);
         fetchRequests();
         fetchSchedule();
+      } else {
+        const data = await response.json();
+        setFeedback({ variant: 'error', title: 'Unable to resolve conflict', message: data.error || 'Please review the conflict and try again.' });
       }
     } catch (err) {
       console.error(err);
@@ -137,7 +148,10 @@ function AdminRequests() {
                       <strong>Room:</strong> {req.requestedRoom?.roomNumber}
                     </p>
                     <p style={{ margin: 0, fontSize: '13px', color: '#5e7590' }}>
-                      <strong>Time:</strong> {req.dayOfWeek} | {req.startTime} - {req.endTime}
+                      <strong>Time:</strong> {req.date ? req.date.slice(0, 10) : req.dayOfWeek} | {req.startTime} - {req.endTime}
+                    </p>
+                    <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#5e7590' }}>
+                      <strong>Batches:</strong> {req.affectedBatches?.join(', ') || 'None selected'}
                     </p>
                   </div>
                   <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
@@ -160,9 +174,9 @@ function AdminRequests() {
                         >
                         Reject
                         </button>
-                    </div>
-                  </div>
+      </div>
                 </div>
+              </div>
               </div>
             ))}
           </div>
@@ -250,7 +264,13 @@ function AdminRequests() {
             
             {modalConfig.type === 'conflict' ? (
               <div style={{ textAlign: 'left', marginBottom: '20px' }}>
-                <p style={{ color: '#5e7590', fontWeight: 'bold' }}>This venue is already occupied by:</p>
+                <p style={{ color: '#5e7590', fontWeight: 'bold' }}>
+                  {modalConfig.conflictType === 'batch'
+                    ? 'One or more selected batches already have an activity during this time:'
+                    : modalConfig.conflictType === 'faculty'
+                      ? 'The selected faculty member already has an activity during this time:'
+                      : 'This venue is already occupied by:'}
+                </p>
                 <div style={{ maxHeight: '150px', overflowY: 'auto', border: '1px solid #eee', padding: '10px', borderRadius: '5px', backgroundColor: '#fafafa', marginBottom: '20px' }}>
                   {modalConfig.conflicts.map((c, idx) => (
                     <div key={idx} style={{ marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
@@ -319,6 +339,7 @@ function AdminRequests() {
           </div>
         </div>
       )}
+      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </div>
   );
 }

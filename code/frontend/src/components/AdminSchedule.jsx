@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../api';
+import { formatDateInput } from '../dateUtils';
+import FeedbackModal from './FeedbackModal';
+import ActionModal from './ActionModal';
 
 function AdminSchedule() {
   const [schedule, setSchedule] = useState([]);
@@ -17,6 +21,7 @@ function AdminSchedule() {
   const [dateList] = useState(generateDates());
   const [selectedDateStr, setSelectedDateStr] = useState(dateList[0].toDateString());
   const selectedDateObj = new Date(selectedDateStr);
+  const selectedDate = formatDateInput(selectedDateObj);
   const selectedDay = selectedDateObj.toLocaleDateString('en-US', { weekday: 'long' });
   const handleDateClick = (e, dateStr) => {
     setSelectedDateStr(dateStr);
@@ -27,6 +32,7 @@ function AdminSchedule() {
   const [eventStudents, setEventStudents] = useState([]);
   const [metadata, setMetadata] = useState({ rooms: [] });
   const [selectedShiftRoom, setSelectedShiftRoom] = useState('');
+  const [feedback, setFeedback] = useState(null);
 
   const getAvailableRooms = () => {
     if (!selectedEvent) return [];
@@ -61,11 +67,11 @@ function AdminSchedule() {
 
   
   useEffect(() => {
-    fetchSchedule(selectedDay);
-  }, [selectedDay]);
+    fetchSchedule(selectedDate);
+  }, [selectedDate]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/admin/metadata')
+    apiFetch('/api/admin/metadata')
       .then(res => res.json())
       .then(data => setMetadata(data))
       .catch(err => console.error(err));
@@ -74,7 +80,7 @@ function AdminSchedule() {
 
   useEffect(() => {
     if (selectedEvent && selectedEvent.affectedBatches && selectedEvent.affectedBatches.length > 0) {
-      fetch('http://localhost:3000/api/admin/students-by-batches', {
+      apiFetch('/api/admin/students-by-batches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ batches: selectedEvent.affectedBatches })
@@ -88,9 +94,9 @@ function AdminSchedule() {
   }, [selectedEvent]);
 
 
-  const fetchSchedule = async (day) => {
+  const fetchSchedule = async (date) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/schedule/day/${day}`);
+      const response = await apiFetch(`/api/admin/schedule/date/${date}`);
       const data = await response.json();
       setSchedule(data);
     } catch (err) {
@@ -110,24 +116,39 @@ function AdminSchedule() {
   
   const handleAction = async (action) => {
     if (action === 'shift' && !selectedShiftRoom) {
-      alert("Please select an alternate room first.");
+      setFeedback({ variant: 'error', title: 'Select an alternate room', message: 'Choose the room where the activity should be shifted.' });
       return;
     }
-    if (!window.confirm(`Are you sure you want to ${action} this activity? Notifications will be sent.`)) return;
+    setFeedback({
+      type: 'confirm',
+      title: `${action === 'cancel' ? 'Cancel' : 'Shift'} this activity?`,
+      message: 'Affected students and faculty will receive an update notification.',
+      pendingAction: action
+    });
+  };
+
+  const confirmAction = async () => {
+    const action = feedback?.pendingAction;
+    setFeedback(null);
+    if (!action) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/admin/activity/${selectedEvent._id}/modify`, {
+      const response = await apiFetch(`/api/admin/activity/${selectedEvent._id}/modify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, newRoomId: selectedShiftRoom })
       });
       if (response.ok) {
-        alert('Activity updated successfully!');
         setSelectedEvent(null);
-        fetchSchedule(selectedDay);
+        setFeedback({ variant: 'success', title: 'Activity updated', message: 'All affected participants have been notified.' });
+        fetchSchedule(selectedDate);
+      } else {
+        const data = await response.json();
+        setFeedback({ variant: 'error', title: 'Unable to update activity', message: data.error || 'Please try again.' });
       }
     } catch (err) {
       console.error(err);
+      setFeedback({ variant: 'error', title: 'Connection problem', message: 'The activity could not be updated. Please try again.' });
     }
   };
 
@@ -341,6 +362,15 @@ function AdminSchedule() {
         </div>
       )}
       </div>
+      <FeedbackModal
+        feedback={feedback?.type ? null : feedback}
+        onClose={() => setFeedback(null)}
+      />
+      <ActionModal
+        modal={feedback?.type === 'confirm' ? feedback : null}
+        onClose={() => setFeedback(null)}
+        onConfirm={confirmAction}
+      />
     </div>
   );
 }

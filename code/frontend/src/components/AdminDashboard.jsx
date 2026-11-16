@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../api';
+import { addDaysAsDateInput, formatDateInput, getDayOfWeekFromDate } from '../dateUtils';
+import BatchSelector from './BatchSelector';
+import FeedbackModal from './FeedbackModal';
 
 function AdminDashboard() {
   const [formData, setFormData] = useState({
     title: 'DBMS Lab',
-    roomId: '', 
+    roomId: '',
     facultyId: '',
-    dayOfWeek: 'Monday',
+    date: '',
+    dayOfWeek: '',
     startTime: '14:00', 
     endTime: '16:00',  
-    batches: '2C54' 
+    batches: []
   });  
 
   const [rooms, setRooms] = useState([]);
   const [faculty, setFaculty] = useState([]);
+  const [batches, setBatches] = useState([]);
+  const [feedback, setFeedback] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/admin/metadata')
+    apiFetch('/api/admin/metadata')
       .then(res => res.json())
       .then(data => {
         setRooms(data.rooms);
         setFaculty(data.faculty);
+        setBatches(data.batches || []);
       })
       .catch(err => console.error(err));
   }, []);
 
-  const handleChange = (e) => { 
+  const handleChange = (e) => {
     const { name, value } = e.target; 
     setFormData(function(prevState) {
     return {
@@ -35,22 +43,40 @@ function AdminDashboard() {
 }); 
   };
 
+  const handleDateChange = (e) => {
+    const date = e.target.value;
+
+    setFormData(prevState => ({
+      ...prevState,
+      date,
+      dayOfWeek: date ? getDayOfWeekFromDate(date) : ''
+    }));
+  };
+
+  const today = formatDateInput();
+  const maxDate = addDaysAsDateInput(60);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.batches.length === 0) {
+      setFeedback({ variant: 'error', title: 'Select a batch', message: 'Choose at least one batch before scheduling this activity.' });
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3000/api/admin/schedule', {
+      const response = await apiFetch('/api/admin/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       const data = await response.json();
-      if (data.success) {
-        alert(data.message);
+      if (response.ok && data.success) {
+        setFeedback({ variant: 'success', title: 'Activity scheduled', message: 'Students from the selected batches and the assigned faculty member have been notified.' });
       } else {
-        alert(data.error);
+        setFeedback({ variant: 'error', title: 'Unable to schedule activity', message: data.error || 'Please review the activity details and try again.' });
       }
     } catch (err) {
-      alert("Failed to schedule activity");
+      setFeedback({ variant: 'error', title: 'Connection problem', message: 'The activity could not be scheduled. Please check that the backend is running and try again.' });
     }
   };
 
@@ -106,13 +132,15 @@ function AdminDashboard() {
             </div>
           </div>
 
-          <div style={styles.formGroup}>
-            <label style={{ fontSize: '14px' }}>Day of Week:</label>
-            <select name="dayOfWeek" value={formData.dayOfWeek} onChange={handleChange} style={styles.input}>
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map(day => (
-                <option key={day} value={day}>{day}</option>
-              ))}
-            </select>
+          <div style={styles.row}>
+            <div style={styles.col}>
+              <label style={{ fontSize: '14px' }}>Activity Date:</label>
+              <input type="date" name="date" value={formData.date} min={today} max={maxDate} onChange={handleDateChange} style={styles.input} required />
+            </div>
+            <div style={styles.col}>
+              <label style={{ fontSize: '14px' }}>Day of Week:</label>
+              <input type="text" value={formData.dayOfWeek} style={{ ...styles.input, backgroundColor: '#e2e8f0' }} readOnly />
+            </div>
           </div>
           
           <div style={styles.row}>
@@ -127,8 +155,12 @@ function AdminDashboard() {
           </div>
 
           <div style={styles.formGroup}>
-            <label style={{ fontSize: '14px' }}>Affected Batches (comma separated):</label>
-            <input type="text" name="batches" value={formData.batches} onChange={handleChange} style={styles.input} placeholder="e.g., 2C51, 2C52" required />
+            <label style={{ fontSize: '14px' }}>Affected Batches:</label>
+            <BatchSelector
+              batches={batches}
+              selectedBatches={formData.batches}
+              onChange={selectedBatches => setFormData(prevState => ({ ...prevState, batches: selectedBatches }))}
+            />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
@@ -136,6 +168,7 @@ function AdminDashboard() {
           </div>
         </form>
       </div>
+      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </div>
   );
 }

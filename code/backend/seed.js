@@ -177,6 +177,30 @@ const scheduleData = [
     { dayOfWeek: "Friday", startTime: "16:20", endTime: "17:10", batch: "3c55", subject: "UCS553L", room: "LT401" }
 ];
 
+const groupedScheduleData = [...scheduleData.reduce((groups, entry) => {
+    const key = [
+        entry.dayOfWeek,
+        entry.startTime,
+        entry.endTime,
+        entry.subject,
+        entry.room
+    ].join('|');
+
+    const existing = groups.get(key);
+    if (existing) {
+        if (!existing.batches.includes(entry.batch)) {
+            existing.batches.push(entry.batch);
+        }
+    } else {
+        groups.set(key, {
+            ...entry,
+            batches: [entry.batch]
+        });
+    }
+
+    return groups;
+}, new Map()).values()];
+
 async function seed() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -216,7 +240,7 @@ async function seed() {
         console.log("Created 25 students across 5 batches.");
 
         // 3. Extract unique subjects and create Faculty for each
-        const uniqueSubjects = [...new Set(scheduleData.map(s => s.subject))];
+        const uniqueSubjects = [...new Set(groupedScheduleData.map(s => s.subject))];
         const facultyMap = {}; // subject -> faculty ObjectId
         let facultyCounter = 1;
         for (const subj of uniqueSubjects) {
@@ -232,7 +256,7 @@ async function seed() {
         console.log(`Created ${uniqueSubjects.length} faculty members based on subjects.`);
 
         // 4. Extract unique rooms and create them
-        const uniqueRooms = [...new Set(scheduleData.map(s => s.room))];
+        const uniqueRooms = [...new Set(groupedScheduleData.map(s => s.room))];
         const roomMap = {}; // roomName -> room ObjectId
         for (const roomName of uniqueRooms) {
             let capacity = 60;
@@ -253,15 +277,16 @@ async function seed() {
         console.log(`Created ${uniqueRooms.length} rooms.`);
 
         // 5. Create Approved Activities from timetable
-        const activityPromises = scheduleData.map(entry => {
+        const activityPromises = groupedScheduleData.map(entry => {
             return Activity.create({
                 title: entry.subject,
                 requestedRoom: roomMap[entry.room],
                 faculty: facultyMap[entry.subject],
                 dayOfWeek: entry.dayOfWeek,
+                isRecurring: true,
                 startTime: entry.startTime,
                 endTime: entry.endTime,
-                affectedBatches: [entry.batch],
+                affectedBatches: entry.batches,
                 status: 'Approved'
             });
         });

@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Notifications from './Notifications';
+import { apiFetch } from '../api';
+import BatchSelector from './BatchSelector';
+import FeedbackModal from './FeedbackModal';
 
 function FacultyDashboard() {
   const navigate = useNavigate();
   const [myRequests, setMyRequests] = useState([]);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const [metadata, setMetadata] = useState({ rooms: [] });
+  const [metadata, setMetadata] = useState({ rooms: [], batches: [] });
+  const [feedback, setFeedback] = useState(null);
 
   const [formData, setFormData] = useState({
     roomNumber: '',
@@ -15,17 +19,18 @@ function FacultyDashboard() {
     capacity: '',
     date: '',
     startTime: '',
-    endTime: ''
+    endTime: '',
+    batches: []
   });
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/admin/metadata')
+    apiFetch('/api/admin/metadata')
       .then(res => res.json())
       .then(data => setMetadata(data))
       .catch(err => console.error(err));
 
     if (user.id || user._id) {
-      fetch(`http://localhost:3000/api/availability/my-requests/${user.id || user._id}`)
+      apiFetch(`/api/availability/my-requests/${user.id || user._id}`)
         .then(res => res.json())
         .then(data => setMyRequests(data))
         .catch(err => console.error(err));
@@ -47,9 +52,14 @@ function FacultyDashboard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.batches.length === 0) {
+      setFeedback({ variant: 'error', title: 'Select a batch', message: 'Choose at least one batch before checking availability.' });
+      return;
+    }
     
     try {
-      const response = await fetch('http://localhost:3000/api/availability/check', {
+      const response = await apiFetch('/api/availability/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -58,7 +68,7 @@ function FacultyDashboard() {
       const data = await response.json();
       
       if (data.error) {
-        alert(data.error);
+        setFeedback({ variant: 'error', title: 'Booking details need attention', message: data.error });
         return;
       }
 
@@ -68,7 +78,7 @@ function FacultyDashboard() {
 
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to connect to server.");
+      setFeedback({ variant: 'error', title: 'Connection problem', message: 'Availability could not be checked. Please try again.' });
     }
   };
 
@@ -127,6 +137,15 @@ function FacultyDashboard() {
               </div>
             </div>
 
+            <div style={{ marginBottom: '25px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#5e7590', marginBottom: '5px' }}>AFFECTED BATCHES</label>
+              <BatchSelector
+                batches={metadata.batches}
+                selectedBatches={formData.batches}
+                onChange={selectedBatches => setFormData(prev => ({ ...prev, batches: selectedBatches }))}
+              />
+            </div>
+
             <button type="submit" style={{ width: '100%', padding: '12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
               CHECK AVAILABILITY & BOOK
             </button>
@@ -150,7 +169,7 @@ function FacultyDashboard() {
                       </span>
                     </div>
                     <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: '#5e7590' }}>Room: {req.requestedRoom?.roomNumber || 'Unknown'}</p>
-                    <p style={{ margin: 0, fontSize: '13px', color: '#5e7590' }}>Time: {req.dayOfWeek} | {req.startTime} - {req.endTime}</p>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#5e7590' }}>Time: {req.date ? req.date.slice(0, 10) : req.dayOfWeek} | {req.startTime} - {req.endTime}</p>
                   </div>
                 ))}
               </div>
@@ -167,6 +186,7 @@ function FacultyDashboard() {
         </div>
 
       </div>
+      <FeedbackModal feedback={feedback} onClose={() => setFeedback(null)} />
     </main>
 
 

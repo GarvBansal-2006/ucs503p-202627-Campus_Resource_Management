@@ -21,6 +21,13 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleSessionExpiry = () => setUser(null);
+    window.addEventListener('auth:expired', handleSessionExpiry);
+
+    return () => window.removeEventListener('auth:expired', handleSessionExpiry);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

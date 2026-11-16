@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/ucs503p-202627-Campus_Resource_Management/', 
+  base: process.env.VITE_BASE_PATH || '/', 
 })

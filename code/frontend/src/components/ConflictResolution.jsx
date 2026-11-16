@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { apiFetch } from '../api';
 
 function ConflictResolution() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function ConflictResolution() {
 
   const submitRequest = async (roomNumber) => {
     try {
-      const response = await fetch('http://localhost:3000/api/availability/request', {
+      const response = await apiFetch('/api/availability/request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -23,7 +24,7 @@ function ConflictResolution() {
           roomNumber,
           facultyId: user.id || user._id,
           title: request.activityType,
-          batches: 'N/A'
+          batches: request.batches || []
         })
       });
       const data = await response.json();
@@ -61,6 +62,14 @@ function ConflictResolution() {
       eyebrowText = "CAPACITY EXCEEDED";
       pageTitle = "Room Too Small";
       pageDescription = "The requested venue cannot hold the number of students required.";
+    } else if (result.conflictType === 'batch') {
+      eyebrowText = "BATCH CONFLICT";
+      pageTitle = "Batch Already Scheduled";
+      pageDescription = "One or more selected batches already have an activity during this time slot.";
+    } else if (result.conflictType === 'faculty') {
+      eyebrowText = "FACULTY CONFLICT";
+      pageTitle = "Faculty Already Scheduled";
+      pageDescription = "The selected faculty member already has an activity during this time slot.";
     } else {
       eyebrowText = "CONFLICT DETECTED";
       pageTitle = "Venue Occupied";

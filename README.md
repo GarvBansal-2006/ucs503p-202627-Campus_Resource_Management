@@ -120,6 +120,11 @@ ucs503p-202627-Campus_Resource_Management/
 
 ### 2. Running the Full-Stack Prototype Locally
 
+Before starting the backend, create `code/backend/.env` from
+`code/backend/.env.example` and set `MONGO_URI` and `JWT_SECRET`.
+The frontend can optionally use `code/frontend/.env` with `VITE_API_URL`
+when the API is not running on `http://localhost:3000`.
+
 **Terminal 1: Start Backend API**
 ```bash
 cd code/backend

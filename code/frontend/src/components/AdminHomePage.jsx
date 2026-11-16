@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { apiFetch } from '../api';
+import { formatDateInput } from '../dateUtils';
 
 function AdminHomePage(){
     const navigate = useNavigate();
@@ -14,7 +16,9 @@ function AdminHomePage(){
     });
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/admin/stats')
+        const today = formatDateInput();
+
+        apiFetch(`/api/admin/stats?date=${today}`)
             .then(res => res.json())
             .then(data => setStats(data))
             .catch(err => console.error(err));
@@ -23,7 +27,7 @@ function AdminHomePage(){
     
     const fetchTodayEvents = async () => {
         try {
-            const res = await fetch('http://localhost:3000/api/admin/schedule/today');
+            const res = await apiFetch(`/api/admin/schedule/today?date=${formatDateInput()}`);
             const data = await res.json();
             setModalData(data);
             setModalType('events');
@@ -32,7 +36,7 @@ function AdminHomePage(){
 
     const fetchVenues = async () => {
         try {
-            const res = await fetch('http://localhost:3000/api/admin/metadata');
+            const res = await apiFetch('/api/admin/metadata');
             const data = await res.json();
             setModalData(data.rooms);
             setModalType('venues');

@@ -1,24 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { apiFetch } from '../api';
+import { addDaysAsDateInput, formatDateInput, getDayOfWeekFromDate } from '../dateUtils';
+import BatchSelector from './BatchSelector';
+import FeedbackModal from './FeedbackModal';
 
 function AdminBooking() {
   const navigate = useNavigate();
-  const [metadata, setMetadata] = useState({ rooms: [], faculty: [] });
+  const [metadata, setMetadata] = useState({ rooms: [], faculty: [], batches: [] });
   const [modalConfig, setModalConfig] = useState(null);
   const [selectedShiftRoom, setSelectedShiftRoom] = useState('');
+  const [feedback, setFeedback] = useState(null);
   
   const [formData, setFormData] = useState({
     title: '',
     roomId: '',
     facultyId: '',
-    dayOfWeek: 'Monday',
+    date: '',
+    dayOfWeek: '',
     startTime: '',
     endTime: '',
-    batches: ''
+    batches: []
   });
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/admin/metadata')
+    apiFetch('/api/admin/metadata')
       .then(res => res.json())
       .then(data => setMetadata(data))
       .catch(err => console.error(err));
@@ -31,59 +37,74 @@ function AdminBooking() {
   const handleDateChange = (e) => {
     const dateStr = e.target.value;
     if (dateStr) {
-      const d = new Date(dateStr);
-      const day = d.toLocaleDateString('en-US', { weekday: 'long' });
-      setFormData({ ...formData, dayOfWeek: day });
+      setFormData({
+        ...formData,
+        date: dateStr,
+        dayOfWeek: getDayOfWeekFromDate(dateStr)
+      });
     }
   };
 
   
-  const today = new Date().toISOString().split('T')[0];
-  const maxDateObj = new Date();
-  maxDateObj.setDate(maxDateObj.getDate() + 60);
-  const maxDate = maxDateObj.toISOString().split('T')[0];
+  const today = formatDateInput();
+  const maxDate = addDaysAsDateInput(60);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.batches.length === 0) {
+      setFeedback({ variant: 'error', title: 'Select a batch', message: 'Choose at least one batch before booking this venue.' });
+      return;
+    }
+
     try {
-      const checkRes = await fetch('http://localhost:3000/api/admin/check-booking', {
+      const checkRes = await apiFetch('/api/admin/check-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
       const data = await checkRes.json();
+
+      if (!checkRes.ok) {
+        setFeedback({ variant: 'error', title: 'Unable to check availability', message: data.error || 'Please review the booking details and try again.' });
+        return;
+      }
       
       if (data.safe) {
-        await fetch('http://localhost:3000/api/admin/schedule', {
+        const scheduleRes = await apiFetch('/api/admin/schedule', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
-        alert('Venue booked successfully!');
-        navigate('/adminHomePage');
+        const scheduleData = await scheduleRes.json();
+        if (!scheduleRes.ok) {
+          setFeedback({ variant: 'error', title: 'Unable to schedule activity', message: scheduleData.error || 'Please review the booking details and try again.' });
+          return;
+        }
+        setFeedback({ variant: 'success', title: 'Venue booked successfully', message: 'Students from the selected batches and the assigned faculty member have been notified.', redirect: true });
       } else {
         setModalConfig({
           type: 'conflict',
           title: '❌ CONFLICT DETECTED',
-          conflicts: data.conflicts
+          conflicts: data.conflicts || [],
+          conflictType: data.conflictType
         });
         setSelectedShiftRoom('');
       }
     } catch (err) {
       console.error(err);
-      alert('Error booking venue');
+      setFeedback({ variant: 'error', title: 'Connection problem', message: 'The venue could not be booked. Please check that the backend is running and try again.' });
     }
   };
 
   const handleResolveConflict = async (action) => {
     if (action === 'shift' && !selectedShiftRoom) {
-      alert("Please select an alternate room first.");
+      setFeedback({ variant: 'error', title: 'Select an alternate venue', message: 'Choose the room where the existing activity should be shifted.' });
       return;
     }
 
     try {
       const conflictIds = modalConfig.conflicts.map(c => c._id);
-      const response = await fetch('http://localhost:3000/api/admin/force-schedule', {
+      const response = await apiFetch('/api/admin/force-schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -96,11 +117,14 @@ function AdminBooking() {
       
       if (response.ok) {
         setModalConfig(null);
-        alert('Conflicts resolved and venue booked successfully!');
-        navigate('/adminHomePage');
+        setFeedback({ variant: 'success', title: 'Conflicts resolved', message: 'The venue was booked and all affected participants have been notified.', redirect: true });
+      } else {
+        const data = await response.json();
+        setFeedback({ variant: 'error', title: 'Unable to resolve conflict', message: data.error || 'Please review the conflict and try again.' });
       }
     } catch (err) {
       console.error(err);
+      setFeedback({ variant: 'error', title: 'Connection problem', message: 'The conflict could not be resolved. Please try again.' });
     }
   };
 
@@ -146,7 +170,7 @@ function AdminBooking() {
           <div style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
             <div style={{ flex: 1 }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#5e7590', marginBottom: '5px' }}>DATE</label>
-              <input type="date" min={today} max={maxDate} onChange={handleDateChange} required style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
+              <input type="date" id="date" min={today} max={maxDate} value={formData.date} onChange={handleDateChange} required style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
             </div>
             <div style={{ flex: 1 }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#5e7590', marginBottom: '5px' }}>DAY OF WEEK</label>
@@ -165,6 +189,15 @@ function AdminBooking() {
             </div>
           </div>
 
+          <div style={{ marginBottom: '25px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#5e7590', marginBottom: '5px' }}>AFFECTED BATCHES</label>
+            <BatchSelector
+              batches={metadata.batches}
+              selectedBatches={formData.batches}
+              onChange={selectedBatches => setFormData(prev => ({ ...prev, batches: selectedBatches }))}
+            />
+          </div>
+
           <button type="submit" style={{ width: '100%', padding: '12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '15px' }}>
             CHECK AVAILABILITY & BOOK
           </button>
@@ -178,7 +211,13 @@ function AdminBooking() {
               {modalConfig.title}
             </h2>
             
-            <p style={{ color: '#5e7590', fontWeight: 'bold', marginBottom: '10px' }}>This venue is already occupied by:</p>
+            <p style={{ color: '#5e7590', fontWeight: 'bold', marginBottom: '10px' }}>
+              {modalConfig.conflictType === 'batch'
+                ? 'One or more selected batches already have an activity during this time:'
+                : modalConfig.conflictType === 'faculty'
+                  ? 'The selected faculty member already has an activity during this time:'
+                  : 'This venue is already occupied by:'}
+            </p>
             <div style={{ maxHeight: '150px', overflowY: 'auto', border: '1px solid #eee', padding: '10px', borderRadius: '5px', backgroundColor: '#fafafa', marginBottom: '20px' }}>
               {modalConfig.conflicts.map((c, idx) => (
                 <div key={idx} style={{ marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
@@ -233,6 +272,14 @@ function AdminBooking() {
           </div>
         </div>
       )}
+      <FeedbackModal
+        feedback={feedback}
+        onClose={() => {
+          const shouldNavigate = feedback?.redirect;
+          setFeedback(null);
+          if (shouldNavigate) navigate('/adminHomePage');
+        }}
+      />
     </div>
   );
 }

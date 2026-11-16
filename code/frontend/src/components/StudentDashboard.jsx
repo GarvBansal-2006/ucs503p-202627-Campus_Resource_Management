@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import Notifications from './Notifications';
+import { apiFetch } from '../api';
+import { formatDateInput } from '../dateUtils';
 
 function StudentDashboard() {
   const [currentDay, setCurrentDay] = useState('');
@@ -49,7 +51,20 @@ function StudentDashboard() {
 
     const dayOfWeek = new Date().toLocaleDateString('en-US', { weekday: 'long' });
     setCurrentDay(dayOfWeek);
-    setTodaySchedule(weeklySchedule[dayOfWeek] || []);
+
+    apiFetch(`/api/availability/my-schedule?date=${formatDateInput()}`)
+      .then(response => response.json())
+      .then(schedule => setTodaySchedule(schedule.map(activity => ({
+        id: activity._id,
+        title: activity.title,
+        room: activity.requestedRoom?.roomNumber || 'TBD',
+        time: `${activity.startTime} - ${activity.endTime}`,
+        type: activity.requestedRoom?.type === 'Lab' || activity.title.toUpperCase().endsWith('P') ? 'Practical' : 'Lecture'
+      }))))
+      .catch(error => {
+        console.error(error);
+        setTodaySchedule(weeklySchedule[dayOfWeek] || []);
+      });
   }, []);
 
   const styles = {
