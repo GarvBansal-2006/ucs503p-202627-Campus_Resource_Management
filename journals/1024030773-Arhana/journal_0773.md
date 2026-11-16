@@ -62,3 +62,9 @@
 * Built `AdminBooking` and `AdminRequests` interfaces for direct scheduling, conflict checks, and request approvals.
 * Added `FacultyHistory` and `Notifications` components with real-time status badges and alerts.
 * Consolidated application styling into `index.css` and removed redundant CSS files.
+
+### Week 13 (Nov 3 - Nov 16): Production Testing & Student Portal Enhancements
+
+* Verified production UI workflows and client bundle routing on the live Render deployment (`https://campus-resource-management-aecw.onrender.com`).
+* Enhanced Student Portal notification view to hide outdated announcements by default with toggleable archive view.
+* Implemented quick-dismiss action buttons on notification cards and audited UI responsiveness.

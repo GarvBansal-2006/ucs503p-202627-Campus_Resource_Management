@@ -62,3 +62,9 @@
 * Updated `seed.js` to populate complete university timetable schedules, batch data, and campus venues.
 * Cleaned up the codebase by removing legacy files (`Makefile`, C++ code) and stripping unused comments.
 * Fixed MkDocs journal navigation links and verified automated GitHub Pages deployments.
+
+### Week 13 (Nov 3 - Nov 16): Cloud Production Deployment & Notification Lifecycle
+
+* Configured single-service production deployment pipeline on Render (`https://campus-resource-management-aecw.onrender.com`) integrated with MongoDB Atlas.
+* Resolved Express v5 route handling, Vite production asset serving, and React Router root basename routing.
+* Added lifecycle filters to automatically turn off outdated notifications on the Student Portal, including purge endpoints.

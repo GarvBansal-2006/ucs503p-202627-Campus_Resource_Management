@@ -4,8 +4,19 @@
 [![Frontend](https://img.shields.io/badge/Frontend-React%20%2F%20Vite-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
 [![Backend](https://img.shields.io/badge/Backend-Node.js%20%2F%20Express-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://expressjs.com/)
 [![Database](https://img.shields.io/badge/Database-MongoDB%20%2F%20Mongoose-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Live Deployment](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=flat-square&logo=render&logoColor=white)](https://campus-resource-management-aecw.onrender.com)
 [![Documentation](https://img.shields.io/badge/Docs-MkDocs%20%2F%20LaTeX-008080?style=flat-square)](https://www.mkdocs.org/)
 [![Institution](https://img.shields.io/badge/TIET-UCS503P%20Software%20Engineering-crimson?style=flat-square)](https://www.thapar.edu/)
+
+---
+
+## 🚀 Live Production Deployment
+
+The Campus Resource Management platform is deployed and publicly accessible online:
+
+* **Live Web Application:** [https://campus-resource-management-aecw.onrender.com](https://campus-resource-management-aecw.onrender.com)
+* **Cloud Infrastructure:** Hosted on **Render** (single-service Node.js Express backend serving production React Vite bundle)
+* **Database Cluster:** **MongoDB Atlas** cloud database with automated connection pooling and replication
 
 ---
 
